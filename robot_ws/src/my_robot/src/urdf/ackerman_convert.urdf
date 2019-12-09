@@ -81,6 +81,32 @@ limitations under the License.
     <parent link="base_link"/>
     <child link="chassis"/>
   </joint>
+  <!-- Range Laser -->
+  <link name="Laser_link">
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <boz size="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+    </visual>
+    <intertial>
+      <mass value="1e-5"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" iz="1e-6"/>
+    </intertial>
+  </link>
+  <joint name="laser_joint" type="fixed">
+    <axis xyz="0 1 0"/>
+    <origin rpy="0 0 0" xyz="0 0 0.2"/>
+    <parent link="chassis"/>
+    <child link="Laser_link"/>
+  </joint>
   <joint name="left_front_shock" type="prismatic">
     <parent link="chassis"/>
     <child link="left_steering_link"/>
@@ -403,5 +429,9 @@ limitations under the License.
   </gazebo>
   <gazebo>
     <plugin filename="libgazebo_ros_control.so" name="gazebo_ros_control"/>
+    <plugin filename="libgazebo_ros_joint_state_publisher.so" name="joint_state_publisher">
+      <jointName>left_front_shock, left_steering_joint, left_front_axle, right_front_shock, right_steering_joint,
+  right_front_axle, left_rear_shock, left_rear_axle, right_rear_shock, right_rear_axle</jointName>
+    </plugin>
   </gazebo>
 </robot>

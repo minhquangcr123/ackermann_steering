@@ -217,7 +217,8 @@ limitations under the License.
                      2 - hex_hub_depth))}
                      0"/>
         <geometry>
-          <cylinder radius="${tire_dia / 2}" length="${tire_width}"/>
+          <cylinder radius="${tire_dia / 2}" length
+          ="${tire_width}"/>
         </geometry>
       </collision>
 
@@ -321,10 +322,74 @@ limitations under the License.
     <parent link="base_link"/>
     <child link="chassis"/>
   </joint>
+  <!-- Range Laser -->
+  <link  name = "Laser_link">
+    <collision>
+      <origin xyz = "0 0 0" rpy ="0 0 0"/>
+      <geometry>
+        <box size ="0.05 0.05 0.05"/>
+      </geometry>
+    </collision>
 
+    <visual>
+      <origin xyz ="0 0 0" rpy ="0 0 0" />
+      <geometry>
+        <box size ="0.05 0.05 0.05"/>
+      </geometry>
+    </visual>
+
+    <intertial>
+      <mass value ="1e-5"/>
+      <origin xyz ="0 0 0" rpy ="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz ="0" iyy="1e-6" iyz = "0" iz="1e-6"/>
+    </intertial>
+
+  </link>
+  <joint name = "laser_joint" type="fixed">
+    <axis xyz = "0 1 0"/>
+    <origin xyz = "0.1 0 0.05 " rpy = "0 0 0"/>
+    <parent link="chassis"/>
+    <child link="Laser_link"/>
+  </joint>
+  <gazebo reference="Laser_link">
+    <material>Gazebo/Red</material>
+    <sensor type="ray" name="head_hokuyo_sensor">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>false</visualize>
+      <update_rate>40</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>720</samples>
+            <resolution>1</resolution>
+            <min_angle>-1.570796</min_angle>
+            <max_angle>1.570796</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.10</min>
+          <max>30.0</max>
+          <resolution>0.01</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <!-- Noise parameters based on published spec for Hokuyo laser
+               achieving "+-30mm" accuracy at range < 10m.  A mean of 0.0m and
+               stddev of 0.01m will put 99.7% of samples within 0.03m of the true
+               reading. -->
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </ray>
+      <plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_laser.so">
+        <topicName>/scan</topicName>
+        <frameName>Laser_link</frameName>
+      </plugin>
+    </sensor>
+  </gazebo>
   
 
-  <!-- Wheels -->
+
   <xacro:front_wheel lr_prefix="left" fr_prefix="front"
                      lr_reflect="1" fr_reflect="1"/>
   <xacro:front_wheel lr_prefix="right" fr_prefix="front"
@@ -333,7 +398,7 @@ limitations under the License.
                     lr_reflect="1" fr_reflect="-1"/>
   <xacro:rear_wheel lr_prefix="right" fr_prefix="rear"
                     lr_reflect="-1" fr_reflect="-1"/>
-
+ 
   <gazebo>
     <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so"/>
     <plugin name ="joint_state_publisher" filename ="libgazebo_ros_joint_state_publisher.so">
