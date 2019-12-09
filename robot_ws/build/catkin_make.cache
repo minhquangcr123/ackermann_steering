@@ -1,0 +1,2 @@
+control_robot:my_robot
+-DCATKIN_DEVEL_PREFIX=/home/tran/robot_ws/devel -DCMAKE_INSTALL_PREFIX=/home/tran/robot_ws/install -G Unix Makefiles

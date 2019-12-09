@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/tran/robot_ws/install/setup.sh
