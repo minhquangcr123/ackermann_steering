@@ -347,7 +347,7 @@ limitations under the License.
   </link>
   <joint name = "laser_joint" type="fixed">
     <axis xyz = "0 1 0"/>
-    <origin xyz = "0.1 0 0.05 " rpy = "0 0 0"/>
+    <origin xyz = "0.1 0 0.1 " rpy = "0 0 0"/>
     <parent link="chassis"/>
     <child link="Laser_link"/>
   </joint>

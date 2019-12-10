@@ -18,6 +18,6 @@ args = "
                                 right_front_shock_ctrlr 
                                 left_rear_shock_ctrlr 
                                 right_rear_shock_ctrlr"/>
-
+<include file="$(find my_robot)/src/launch/controller.launch"/>
 
 </launch>
