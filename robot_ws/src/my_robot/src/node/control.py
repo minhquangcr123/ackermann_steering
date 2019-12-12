@@ -92,7 +92,7 @@ class Ackermann(object):
 
     def callback(self, data):
         self._steer_ang = data.angular.z
-        self._speed = data.linear.x *  5
+        self._speed = data.linear.x *  7
 
     def spin(self) :
         rospy.Subscriber("/cmd_vel_mux/input/teleop", Twist, self.callback)

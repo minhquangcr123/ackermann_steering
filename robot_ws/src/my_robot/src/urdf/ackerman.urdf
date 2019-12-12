@@ -351,11 +351,12 @@ limitations under the License.
     <parent link="chassis"/>
     <child link="Laser_link"/>
   </joint>
+
   <gazebo reference="Laser_link">
     <material>Gazebo/Red</material>
     <sensor type="ray" name="head_hokuyo_sensor">
       <pose>0 0 0 0 0 0</pose>
-      <visualize>false</visualize>
+      <visualize>true</visualize>
       <update_rate>40</update_rate>
       <ray>
         <scan>
@@ -371,6 +372,7 @@ limitations under the License.
           <max>30.0</max>
           <resolution>0.01</resolution>
         </range>
+        
         <noise>
           <type>gaussian</type>
           <!-- Noise parameters based on published spec for Hokuyo laser
@@ -380,6 +382,7 @@ limitations under the License.
           <mean>0.0</mean>
           <stddev>0.01</stddev>
         </noise>
+
       </ray>
       <plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_laser.so">
         <topicName>/scan</topicName>
