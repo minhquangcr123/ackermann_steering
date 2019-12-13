@@ -91,8 +91,8 @@ class Ackermann(object):
         self.right_rear_axle_pub = self.creat_cmd_pub(respone, self.right_rear_axle_ctrlr_name)
 
     def callback(self, data):
-        self._steer_ang = data.angular.z
-        self._speed = data.linear.x *  7
+        self._steer_ang = data.angular.z / 1.5 * (math.pi/4)
+        self._speed = data.linear.x *  10
 
     def spin(self) :
         rospy.Subscriber("/cmd_vel_mux/input/teleop", Twist, self.callback)
@@ -149,9 +149,11 @@ class Ackermann(object):
         odom.header = header
         odom.pose.pose = result.pose
         odom.twist.twist = result.twist
+        quat = [0,0, odom.pose.pose.orientation.z, odom.pose.pose.orientation.w]
+        quat = quat / np.linalg.norm(quat)
         #odom_quat = tf.transformations.quaternion_from_euler(0, 0, odom.pose.pose.orientation.z)
         odom_broadcaster.sendTransform((odom.pose.pose.position.x, odom.pose.pose.position.y, 0), 
-                                            (0,0, odom.pose.pose.orientation.z, odom.pose.pose.orientation.w), rospy.Time.now(), "base_link","odom")
+                                            (0, 0, quat[2], quat[3]), rospy.Time.now(), "base_link","odom")
         odom_pub.publish(odom)
         
     def control_axle(self, speed, accel_limit, delta_t, steer_angle_changed, center_y, angle):
