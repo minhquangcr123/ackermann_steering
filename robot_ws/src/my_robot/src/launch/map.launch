@@ -12,4 +12,15 @@
           <remap from="voxel_grid" to="costmap/voxel_grid"/>
 </node>
 
+<node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <rosparam file="$(find my_robot)/src/config/cost_map_common.yaml" command="load" ns="global_costmap" /> 
+    <rosparam file="$(find my_robot)/src/config/cost_map_common.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find my_robot)/src/config/local_costmap.yaml" command="load" />
+    <rosparam file="$(find my_robot)/src/config/global_costmap.yaml" command="load" /> 
+    <rosparam file="$(find my_robot)/src/config/base_local_planner.yaml" command="load" />
+ </node>
+
+ <!--node name="costmap_node" pkg="costmap_2d" type="costmap_2d_node" >
+    <rosparam file="$(find my_robot)/src/config/cost_map.yaml" command="load" /> 
+</node-->
 </launch>
