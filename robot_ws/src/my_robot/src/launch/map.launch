@@ -1,0 +1,15 @@
+<launch>
+
+<!-- Load map saved before-->
+<node name="map_server" pkg="map_server" type="map_server" output ="screen"
+          args="/home/tran/github/bag_file/map.yaml my_map_resolution">
+</node>
+<node name ="amcl" pkg="amcl" type="amcl">
+                <remap from="scan" to="scan"/>
+
+</node>
+<node pkg="costmap_2d" type="costmap_2d_markers" name="voxel_visualizer">
+          <remap from="voxel_grid" to="costmap/voxel_grid"/>
+</node>
+
+</launch>

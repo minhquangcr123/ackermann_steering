@@ -91,7 +91,8 @@ class Ackermann(object):
         self.right_rear_axle_pub = self.creat_cmd_pub(respone, self.right_rear_axle_ctrlr_name)
 
     def callback(self, data):
-        self._steer_ang = data.angular.z / 1.5 * (math.pi/4)
+        self._steer_ang = data.angular.z / 1 * (math.pi/4)
+        print(self._steer_ang)
         self._speed = data.linear.x *  10
 
     def spin(self) :
@@ -114,12 +115,11 @@ class Ackermann(object):
                 steer_ang_changed, center_y = self.control_steer(steer_ang, steer_ang_vel, delta_t)
                 self.control_axle(speed, accel, delta_t, steer_ang_changed,
                                  center_y, steer_ang)
-               
+            
 
 
             self.left_steer_pub.publish(self._theta_left)
             self.right_steer_pub.publish(self._theta_right)
-
             
             self.left_front_axle_pub.publish(self._left_front_ang_vel)
             self.right_front_axle_pub.publish(self._right_front_ang_vel)

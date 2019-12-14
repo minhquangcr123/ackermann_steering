@@ -9,7 +9,6 @@
 # modified environment variables
 export CMAKE_PREFIX_PATH="/home/tran/github/robot_ws/devel:$CMAKE_PREFIX_PATH"
 export LD_LIBRARY_PATH="/home/tran/github/robot_ws/devel/lib:$LD_LIBRARY_PATH"
-export PKG_CONFIG_PATH="/home/tran/github/robot_ws/devel/lib/pkgconfig:$PKG_CONFIG_PATH"
 export PWD="/home/tran/github/robot_ws/build"
 export ROSLISP_PACKAGE_DIRECTORIES="/home/tran/github/robot_ws/devel/share/common-lisp:$ROSLISP_PACKAGE_DIRECTORIES"
-export ROS_PACKAGE_PATH="/home/tran/robot_ws/src:/home/tran/github/robot_ws/src:$ROS_PACKAGE_PATH"
+export ROS_PACKAGE_PATH="/home/tran/github/robot_ws/src:$ROS_PACKAGE_PATH"

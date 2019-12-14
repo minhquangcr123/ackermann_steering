@@ -1,26 +1,12 @@
 #!/usr/bin/env python
-import roslib
+from std_msgs.msg import Float32
 import rospy
-roslib.load_manifest('my_robot')
-import numpy as np
-from gazebo_msgs.msg import LinkStates
-from geometry_msgs.msg import Pose
-from nav_msgs.msg import Odometry
-import tf
+rospy.init_node("hello")
+pub = rospy.Publisher("hello", Float32,queue_size = 1)
+rate = rospy.Rate(10)
 
-from std_msgs.msg import Header
-from gazebo_msgs.srv import GetModelState, GetModelStateRequest
-
-rospy.init_node('odom_pub')
-rospy.wait_for_service ('/gazebo/get_model_state')
-get_model_srv = rospy.ServiceProxy('/gazebo/get_model_state', GetModelState)
-
-odom=Odometry()
-header = Header()
-header.frame_id='/odom'
-
-model = GetModelStateRequest()
-model.model_name='ackerman'
-result = get_model_srv(model)
-print(result)
-
+while not rospy.is_shutdown():
+    a = Float32()
+    a.data = 1
+    pub.publish(a)
+    rate.sleep()

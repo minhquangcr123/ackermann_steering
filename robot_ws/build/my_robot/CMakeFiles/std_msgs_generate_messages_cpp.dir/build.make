@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/tran/robot_ws/src
+CMAKE_SOURCE_DIR = /home/tran/github/robot_ws/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/tran/robot_ws/build
+CMAKE_BINARY_DIR = /home/tran/github/robot_ws/build
 
 # Utility rule file for std_msgs_generate_messages_cpp.
 
@@ -63,10 +63,10 @@ my_robot/CMakeFiles/std_msgs_generate_messages_cpp.dir/build: std_msgs_generate_
 .PHONY : my_robot/CMakeFiles/std_msgs_generate_messages_cpp.dir/build
 
 my_robot/CMakeFiles/std_msgs_generate_messages_cpp.dir/clean:
-	cd /home/tran/robot_ws/build/my_robot && $(CMAKE_COMMAND) -P CMakeFiles/std_msgs_generate_messages_cpp.dir/cmake_clean.cmake
+	cd /home/tran/github/robot_ws/build/my_robot && $(CMAKE_COMMAND) -P CMakeFiles/std_msgs_generate_messages_cpp.dir/cmake_clean.cmake
 .PHONY : my_robot/CMakeFiles/std_msgs_generate_messages_cpp.dir/clean
 
 my_robot/CMakeFiles/std_msgs_generate_messages_cpp.dir/depend:
-	cd /home/tran/robot_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/tran/robot_ws/src /home/tran/robot_ws/src/my_robot /home/tran/robot_ws/build /home/tran/robot_ws/build/my_robot /home/tran/robot_ws/build/my_robot/CMakeFiles/std_msgs_generate_messages_cpp.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/tran/github/robot_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/tran/github/robot_ws/src /home/tran/github/robot_ws/src/my_robot /home/tran/github/robot_ws/build /home/tran/github/robot_ws/build/my_robot /home/tran/github/robot_ws/build/my_robot/CMakeFiles/std_msgs_generate_messages_cpp.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : my_robot/CMakeFiles/std_msgs_generate_messages_cpp.dir/depend
 
