@@ -91,12 +91,12 @@ class Ackermann(object):
         self.right_rear_axle_pub = self.creat_cmd_pub(respone, self.right_rear_axle_ctrlr_name)
 
     def callback(self, data):
-        self._steer_ang = data.angular.z 
-        self._speed = data.linear.x  *  7
-        print(self._steer_ang, self._speed)
+        self._steer_ang = data.angular.z / 1 * (math.pi/4)
+        self._speed = data.linear.x  * 10
+        print(self._speed)
 
     def spin(self) :
-        rospy.Subscriber("/cmd_vel", Twist, self.callback)
+        rospy.Subscriber("/cmd_vel_mux/input/teleop", Twist, self.callback)
         last_time = rospy.get_time()
         while not rospy.is_shutdown():
             t = rospy.get_time()
@@ -175,20 +175,19 @@ class Ackermann(object):
                 #print(left_dist, right_dist)
 
                     #Front
-                gain = (2 * math.pi) * veh_speed / abs(center_y)
-                #gain =  veh_speed / abs(center_y)
+                #gain = (1 * math.pi) * veh_speed / abs(center_y)
+                gain = 6 *  veh_speed / abs(center_y)
                 r_in = np.linalg.norm(left_dist ** 2 + self.square_wheel_base)
-                self._left_front_ang_vel = gain * r_in* self.left_front_iv_cir # v_angle = v_linear * omega = v_linear * 2 pi / T
+                self._left_front_ang_vel = gain * r_in* self.left_front_iv_cir # v_angle = K * v_linear * omega = v_linear * 2 pi / T
                 
                 r_out = np.linalg.norm(right_dist ** 2 + self.square_wheel_base)
                 self._right_front_ang_vel = gain * r_out * self.right_front_iv_cir
                 
                
                     #Rear
-                gain = (2 * math.pi) * veh_speed / abs(center_y)
  
-                self._left_rear_ang_vel = gain * abs(left_dist * self.left_front_iv_cir)
-                self._right_rear_ang_vel = gain * abs(right_dist * self.left_front_iv_cir)
+                self._left_rear_ang_vel = gain * abs(left_dist) * self.left_front_iv_cir
+                self._right_rear_ang_vel = gain * abs(right_dist) * self.left_front_iv_cir
                
             else :
                 self._last_speed = veh_speed

@@ -4,13 +4,12 @@
 <node name="map_server" pkg="map_server" type="map_server" output ="screen"
           args="/home/tran/github/bag_file/map.yaml my_map_resolution">
 </node>
-<node name ="amcl" pkg="amcl" type="amcl">
+<!--node name ="amcl" pkg="amcl" type="amcl">
                 <remap from="scan" to="scan"/>
 
-</node>
-<node pkg="costmap_2d" type="costmap_2d_markers" name="voxel_visualizer">
-          <remap from="voxel_grid" to="costmap/voxel_grid"/>
-</node>
+</node-->
+
+<include file="$(find amcl)/examples/amcl_omni.launch" />
 
 <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
     <rosparam file="$(find my_robot)/src/config/cost_map_common.yaml" command="load" ns="global_costmap" /> 
@@ -18,6 +17,8 @@
     <rosparam file="$(find my_robot)/src/config/local_costmap.yaml" command="load" />
     <rosparam file="$(find my_robot)/src/config/global_costmap.yaml" command="load" /> 
     <rosparam file="$(find my_robot)/src/config/base_local_planner.yaml" command="load" />
+    <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
+    <param name="controller_frequency" value="10.0" />
  </node>
 
  <!--node name="costmap_node" pkg="costmap_2d" type="costmap_2d_node" >
