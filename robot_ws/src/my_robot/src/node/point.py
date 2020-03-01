@@ -11,10 +11,13 @@ from geometry_msgs.msg import Pose, Point, Quaternion
 from tf.transformations import quaternion_from_euler
 from sympy import symbols, Eq, solve
 import argparse
-#point_seq = [[10.0, 10.0, 30.0], [1.0,1.0, 30.0], [10.0, 10.0, 30.0]]
 
 
-class Cal_point():
+class Cal_point(): #Tính toán điểm sẽ đi từ tọa độ vật cản
+  #Đầu vào point_obs là điểm vật cản, mode chọn chế độ slalom hoặc parking.
+  #function mode_parking tính toán điểm nằm giữa 2 vật cản
+  #function mode_slalom tính toán các điểm theo quỹ đạo
+
   def __init__(self, mode, point_obs):
     self.mode = mode
     self.point_seq_obs = point_obs
@@ -71,7 +74,7 @@ class Cal_point():
 
       biendoi = -biendoi
 
-class Move_seq():
+class Move_seq(): #Gửi nhiều điểm tọa độ bằng action lên Rviz
   def __init__(self, point_seq):
     rospy.init_node("move_base_sequence")
     self.point_seq = point_seq
@@ -117,8 +120,8 @@ class Move_seq():
     rospy.spin()
 
 if __name__ == "__main__":
-  p_obs = [[3.01, -2.89], [0.5, -2.9], [-2.2, -3.06], [-4.8, -3.08]]
-  def_point = Cal_point("slalom", p_obs )
+  p_obs = [[3.01, -2.89], [0.5, -2.9], [-2.2, -3.06], [-4.8, -3.08]] # Gửi tọa độ vật cản 
+  def_point = Cal_point("slalom", p_obs ) 
   point_move = def_point.point_move
   print(point_move)
   Move_seq(point_move)
