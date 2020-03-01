@@ -38,9 +38,9 @@ limitations under the License.
        along the y axis, and chassis_height along the z axis. -->
   <xacro:property name="chassis_length" value="0.258"/>
   <xacro:property name="chassis_width" value="0.168"/>
-  <xacro:property name="chassis_height" value="0.01"/>
-  <xacro:property name="chassis_mass" value="5.788"/>
-
+  <xacro:property name="chassis_height" value="0.1"/>
+  <xacro:property name="chassis_mass" value="2.988"/>
+  
   <!-- hub_dia and tire_dia are the diameters of the hub and tire,
        respectively. hex_hub_depth is the distance that the hex hub is
        inset from the outer edge of the tire. It is set so that each wheel
@@ -50,7 +50,7 @@ limitations under the License.
   <xacro:property name="tire_dia" value="0.14605"/>
   <xacro:property name="tire_width" value="0.0889"/>
   <xacro:property name="hex_hub_depth" value="0.01445"/>
-  <xacro:property name="wheel_mass" value="3.29"/>
+  <xacro:property name="wheel_mass" value="0.29"/>
 
   <!-- hex_hub_dist is the distance between left and right hex hubs when
        the shock absorbers are fully extended. axle_length is the distance
@@ -391,8 +391,77 @@ limitations under the License.
       </plugin>
     </sensor>
   </gazebo>
-  
 
+  <joint name = "joint_camera" type="fixed">
+    <axis xyz = "0 1 0"/>
+    <origin xyz = "0 0 0.2 " rpy = "0 0 0"/>
+    <parent link="Laser_link"/>
+    <child link="Camera_link"/>
+  </joint>
+
+  <link  name = "Camera_link">
+    <collision>
+      <origin xyz = "0 0 0" rpy ="0 0 0"/>
+      <geometry>
+        <box size ="0.05 0.05 0.05"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz ="0 0 0" rpy ="0 0 0" />
+      <geometry>
+        <box size ="0.05 0.05 0.05"/>
+      </geometry>
+    </visual>
+
+    <intertial>
+      <mass value ="1e-5"/>
+      <origin xyz ="0 0 0" rpy ="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz ="0" iyy="1e-6" iyz = "0" iz="1e-6"/>
+    </intertial>
+
+  </link>
+  
+  <!-- camera -->
+  <gazebo reference="Camera_link">
+    <sensor type="camera" name="camera1">
+      <update_rate>30.0</update_rate>
+      <camera name="head">
+        <horizontal_fov>1.3962634</horizontal_fov>
+        <image>
+          <width>800</width>
+          <height>800</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.02</near>
+          <far>300</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <!-- Noise is sampled independently per pixel on each frame.
+               That pixel's noise value is added to each of its color
+               channels, which at that point lie in the range [0,1]. -->
+          <mean>0.0</mean>
+          <stddev>0.007</stddev>
+        </noise>
+      </camera>
+      <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>0.0</updateRate>
+        <cameraName>camera1</cameraName>
+        <imageTopicName>image_raw</imageTopicName>
+        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+        <frameName>Camera_link</frameName>
+        <hackBaseline>0.07</hackBaseline>
+        <distortionK1>0.0</distortionK1>
+        <distortionK2>0.0</distortionK2>
+        <distortionK3>0.0</distortionK3>
+        <distortionT1>0.0</distortionT1>
+        <distortionT2>0.0</distortionT2>
+      </plugin>
+    </sensor>
+  </gazebo>
 
   <xacro:front_wheel lr_prefix="left" fr_prefix="front"
                      lr_reflect="1" fr_reflect="1"/>

@@ -12,12 +12,14 @@ import tf
 from nav_msgs.msg import Odometry
 from std_msgs.msg import Header
 from gazebo_msgs.srv import GetModelState, GetModelStateRequest
-
+from Tkinter import *
+from nav_msgs.msg import Path
+from geometry_msgs.msg import PoseStamped
 class Ackermann(object):
 
     def __init__(self):
         #Init node 
-        rospy.init_node("ackermann_controller", anonymous = True   )
+        rospy.init_node("ackermann_controller")
         list_ctr = rospy.ServiceProxy("/controller_manager/list_controllers", ListControllers)
         list_ctr.wait_for_service()
         respone = list_ctr()
@@ -26,7 +28,8 @@ class Ackermann(object):
         self.time_out = 1.0
         self.frequency = rospy.Rate(30.0)
         self._cmd_timeout = 60* 10
-
+        self.point = []
+        self.odom_car = []
         #get parameters 
         (self.left_steering_name, self.left_steering_ctrlr_name, 
         self.left_front_axle_ctrlr_name, self.left_front_iv_cir, self.left_rear_link_name, self.left_rear_axle_ctrlr_name, self.left_rear_iv_cir) = self.get_wheel_param("left") 
@@ -54,7 +57,7 @@ class Ackermann(object):
         self._steer_ang = 0.0# Steering angle 
         self._steer_ang_vel = 0.0# Steering angle velocity
         self._speed = 0.0
-        self._accel = 0.0     # Acceleration
+        self._accel = 0.0   # Acceleration
 
         self._last_steer_ang = 0.0 # Last steering angle
         self._theta_left = 0.0      # Left steering joint angle
@@ -92,13 +95,18 @@ class Ackermann(object):
 
     def callback(self, data):
         self._steer_ang = data.angular.z 
-        self._speed = data.linear.x  *  7
-        print(self._steer_ang, self._speed)
+        self._speed = data.linear.x  *  4
+        #print(self._steer_ang, self._speed)
+   
 
     def spin(self) :
-        rospy.Subscriber("/cmd_vel", Twist, self.callback)
+        
+
         last_time = rospy.get_time()
         while not rospy.is_shutdown():
+            rospy.Subscriber("/cmd_vel", Twist, self.callback)
+
+            
             t = rospy.get_time()
             delta_t = t - last_time
             last_time = t
@@ -127,9 +135,10 @@ class Ackermann(object):
             self.right_rear_axle_pub.publish(self._right_rear_ang_vel)
 
             #print(self._left_front_ang_vel,self._right_front_ang_vel,self._left_rear_ang_vel,self._right_rear_ang_vel)
+            
             self.tranform()
-
             self.frequency.sleep()
+
     def tranform(self):
         odom_pub = rospy.Publisher("/my_odom", Odometry, queue_size = 10)
         odom_broadcaster = tf.TransformBroadcaster()
@@ -155,7 +164,8 @@ class Ackermann(object):
         odom_broadcaster.sendTransform((odom.pose.pose.position.x, odom.pose.pose.position.y, 0), 
                                             (0, 0, quat[2], quat[3]), rospy.Time.now(), "base_link","odom")
         odom_pub.publish(odom)
-        
+        self.odom_car=[odom.pose.pose.position.x, odom.pose.pose.position.y, quat[2], quat[3]]
+
     def control_axle(self, speed, accel_limit, delta_t, steer_angle_changed, center_y, angle):
         #control axle
         if accel_limit >0.0:

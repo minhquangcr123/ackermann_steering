@@ -3,6 +3,6 @@ prefix=/home/tran/github/robot_ws/install
 Name: my_robot
 Description: Description of my_robot
 Version: 0.0.0
-Cflags: 
+Cflags: -I/home/tran/github/robot_ws/install/include
 Libs: -L/home/tran/github/robot_ws/install/lib 
-Requires: 
+Requires: rospy std_msgs geometry_msgs message_runtime
