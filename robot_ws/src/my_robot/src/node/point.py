@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-# Author: christoph.roesmann@tu-dortmund.de
 import numpy as np
 import tf
 import rospy, math
