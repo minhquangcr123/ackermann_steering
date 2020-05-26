@@ -8,4 +8,3 @@
 
 # modified environment variables
 export PWD="/home/tran/github/robot_ws/build"
-export PYTHONPATH="/home/tran/github/robot_ws/devel/lib/python2.7/dist-packages:$PYTHONPATH"

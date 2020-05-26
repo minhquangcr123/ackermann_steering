@@ -1,2 +1,2 @@
-my_robot
+my_robot:obstacle_detector
 -DCATKIN_DEVEL_PREFIX=/home/tran/github/robot_ws/devel -DCMAKE_INSTALL_PREFIX=/home/tran/github/robot_ws/install -G Unix Makefiles

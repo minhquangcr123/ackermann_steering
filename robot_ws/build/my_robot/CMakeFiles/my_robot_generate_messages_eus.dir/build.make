@@ -59,6 +59,10 @@ my_robot/CMakeFiles/my_robot_generate_messages_eus: /home/tran/github/robot_ws/d
 
 /home/tran/github/robot_ws/devel/share/roseus/ros/my_robot/msg/ackermann.l: /opt/ros/kinetic/lib/geneus/gen_eus.py
 /home/tran/github/robot_ws/devel/share/roseus/ros/my_robot/msg/ackermann.l: /home/tran/github/robot_ws/src/my_robot/msg/ackermann.msg
+/home/tran/github/robot_ws/devel/share/roseus/ros/my_robot/msg/ackermann.l: /opt/ros/kinetic/share/geometry_msgs/msg/Quaternion.msg
+/home/tran/github/robot_ws/devel/share/roseus/ros/my_robot/msg/ackermann.l: /opt/ros/kinetic/share/geometry_msgs/msg/PoseStamped.msg
+/home/tran/github/robot_ws/devel/share/roseus/ros/my_robot/msg/ackermann.l: /opt/ros/kinetic/share/geometry_msgs/msg/Pose.msg
+/home/tran/github/robot_ws/devel/share/roseus/ros/my_robot/msg/ackermann.l: /opt/ros/kinetic/share/std_msgs/msg/Header.msg
 /home/tran/github/robot_ws/devel/share/roseus/ros/my_robot/msg/ackermann.l: /opt/ros/kinetic/share/geometry_msgs/msg/Point.msg
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/tran/github/robot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating EusLisp code from my_robot/ackermann.msg"
 	cd /home/tran/github/robot_ws/build/my_robot && ../catkin_generated/env_cached.sh /usr/bin/python /opt/ros/kinetic/share/geneus/cmake/../../../lib/geneus/gen_eus.py /home/tran/github/robot_ws/src/my_robot/msg/ackermann.msg -Imy_robot:/home/tran/github/robot_ws/src/my_robot/msg -Istd_msgs:/opt/ros/kinetic/share/std_msgs/cmake/../msg -Igeometry_msgs:/opt/ros/kinetic/share/geometry_msgs/cmake/../msg -p my_robot -o /home/tran/github/robot_ws/devel/share/roseus/ros/my_robot/msg

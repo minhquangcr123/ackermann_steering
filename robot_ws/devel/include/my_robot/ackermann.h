@@ -15,7 +15,7 @@
 #include <ros/builtin_message_traits.h>
 #include <ros/message_operations.h>
 
-#include <geometry_msgs/Point.h>
+#include <geometry_msgs/PoseStamped.h>
 
 namespace my_robot
 {
@@ -34,7 +34,7 @@ struct ackermann_
 
 
 
-   typedef std::vector< ::geometry_msgs::Point_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::geometry_msgs::Point_<ContainerAllocator> >::other >  _points_type;
+   typedef std::vector< ::geometry_msgs::PoseStamped_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::geometry_msgs::PoseStamped_<ContainerAllocator> >::other >  _points_type;
   _points_type points;
 
 
@@ -115,12 +115,12 @@ struct MD5Sum< ::my_robot::ackermann_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "3fb3f9dacc279b964c4c8341122c34df";
+    return "0ac6d244346982eba936c77e43e67b98";
   }
 
   static const char* value(const ::my_robot::ackermann_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0x3fb3f9dacc279b96ULL;
-  static const uint64_t static_value2 = 0x4c4c8341122c34dfULL;
+  static const uint64_t static_value1 = 0x0ac6d244346982ebULL;
+  static const uint64_t static_value2 = 0xa936c77e43e67b98ULL;
 };
 
 template<class ContainerAllocator>
@@ -139,7 +139,37 @@ struct Definition< ::my_robot::ackermann_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "geometry_msgs/Point[] points\n\
+    return "geometry_msgs/PoseStamped[] points\n\
+\n\
+================================================================================\n\
+MSG: geometry_msgs/PoseStamped\n\
+# A Pose with reference coordinate frame and timestamp\n\
+Header header\n\
+Pose pose\n\
+\n\
+================================================================================\n\
+MSG: std_msgs/Header\n\
+# Standard metadata for higher-level stamped data types.\n\
+# This is generally used to communicate timestamped data \n\
+# in a particular coordinate frame.\n\
+# \n\
+# sequence ID: consecutively increasing ID \n\
+uint32 seq\n\
+#Two-integer timestamp that is expressed as:\n\
+# * stamp.sec: seconds (stamp_secs) since epoch (in Python the variable is called 'secs')\n\
+# * stamp.nsec: nanoseconds since stamp_secs (in Python the variable is called 'nsecs')\n\
+# time-handling sugar is provided by the client library\n\
+time stamp\n\
+#Frame this data is associated with\n\
+# 0: no frame\n\
+# 1: global frame\n\
+string frame_id\n\
+\n\
+================================================================================\n\
+MSG: geometry_msgs/Pose\n\
+# A representation of pose in free space, composed of position and orientation. \n\
+Point position\n\
+Quaternion orientation\n\
 \n\
 ================================================================================\n\
 MSG: geometry_msgs/Point\n\
@@ -147,6 +177,15 @@ MSG: geometry_msgs/Point\n\
 float64 x\n\
 float64 y\n\
 float64 z\n\
+\n\
+================================================================================\n\
+MSG: geometry_msgs/Quaternion\n\
+# This represents an orientation in free space in quaternion form.\n\
+\n\
+float64 x\n\
+float64 y\n\
+float64 z\n\
+float64 w\n\
 ";
   }
 
@@ -190,7 +229,7 @@ struct Printer< ::my_robot::ackermann_<ContainerAllocator> >
       s << indent << "  points[" << i << "]: ";
       s << std::endl;
       s << indent;
-      Printer< ::geometry_msgs::Point_<ContainerAllocator> >::stream(s, indent + "    ", v.points[i]);
+      Printer< ::geometry_msgs::PoseStamped_<ContainerAllocator> >::stream(s, indent + "    ", v.points[i]);
     }
   }
 };

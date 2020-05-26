@@ -58,6 +58,10 @@ my_robot/CMakeFiles/my_robot_generate_messages_cpp: /home/tran/github/robot_ws/d
 
 /home/tran/github/robot_ws/devel/include/my_robot/ackermann.h: /opt/ros/kinetic/lib/gencpp/gen_cpp.py
 /home/tran/github/robot_ws/devel/include/my_robot/ackermann.h: /home/tran/github/robot_ws/src/my_robot/msg/ackermann.msg
+/home/tran/github/robot_ws/devel/include/my_robot/ackermann.h: /opt/ros/kinetic/share/geometry_msgs/msg/Quaternion.msg
+/home/tran/github/robot_ws/devel/include/my_robot/ackermann.h: /opt/ros/kinetic/share/geometry_msgs/msg/PoseStamped.msg
+/home/tran/github/robot_ws/devel/include/my_robot/ackermann.h: /opt/ros/kinetic/share/geometry_msgs/msg/Pose.msg
+/home/tran/github/robot_ws/devel/include/my_robot/ackermann.h: /opt/ros/kinetic/share/std_msgs/msg/Header.msg
 /home/tran/github/robot_ws/devel/include/my_robot/ackermann.h: /opt/ros/kinetic/share/geometry_msgs/msg/Point.msg
 /home/tran/github/robot_ws/devel/include/my_robot/ackermann.h: /opt/ros/kinetic/share/gencpp/msg.h.template
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/tran/github/robot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating C++ code from my_robot/ackermann.msg"

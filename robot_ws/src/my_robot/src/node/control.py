@@ -15,6 +15,7 @@ from gazebo_msgs.srv import GetModelState, GetModelStateRequest
 from Tkinter import *
 from nav_msgs.msg import Path
 from geometry_msgs.msg import PoseStamped
+from sensor_msgs.msg import LaserScan
 class Ackermann(object):
 
     def __init__(self):
@@ -94,10 +95,15 @@ class Ackermann(object):
         self.right_rear_axle_pub = self.creat_cmd_pub(respone, self.right_rear_axle_ctrlr_name)
 
     def callback(self, data):
-        self._steer_ang = data.angular.z 
+        self._steer_ang = data.angular.z * 2
         self._speed = data.linear.x  *  4
         #print(self._steer_ang, self._speed)
-   
+
+    def callback_scan(self, data_scan):
+        pub_scan = rospy.Publisher("front_scan", LaserScan, queue_size=10)
+        pub_scan = rospy.Publisher("rear_scan", LaserScan, queue_size=10)
+        pub_scan.publish(data_scan)
+        
 
     def spin(self) :
         
@@ -105,8 +111,8 @@ class Ackermann(object):
         last_time = rospy.get_time()
         while not rospy.is_shutdown():
             rospy.Subscriber("/cmd_vel", Twist, self.callback)
-
-            
+            rospy.Subscriber("/scan", LaserScan, self.callback_scan)
+            #print(self.wheel_base)
             t = rospy.get_time()
             delta_t = t - last_time
             last_time = t
@@ -138,6 +144,7 @@ class Ackermann(object):
             
             self.tranform()
             self.frequency.sleep()
+    
 
     def tranform(self):
         odom_pub = rospy.Publisher("/my_odom", Odometry, queue_size = 10)
@@ -205,7 +212,7 @@ class Ackermann(object):
                 left_dist = center_y - self.dis_stee_div2
                 right_dist = center_y + self.dis_stee_div2
 
-                gain = (2 * math.pi) * veh_speed / abs(center_y)
+                gain = (2 * math.pi) * veh_speed / abs(center_y) / 50
                 self._left_rear_ang_vel = gain * left_dist * self.left_front_iv_cir
                 self._right_rear_ang_vel = gain * right_dist * self.left_front_iv_cir
                 self._left_front_ang_vel = gain * left_dist * self.left_front_iv_cir

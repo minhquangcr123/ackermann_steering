@@ -54,7 +54,7 @@ CMAKE_BINARY_DIR = /home/tran/github/robot_ws/build
 include my_robot/CMakeFiles/_my_robot_generate_messages_check_deps_ackermann.dir/progress.make
 
 my_robot/CMakeFiles/_my_robot_generate_messages_check_deps_ackermann:
-	cd /home/tran/github/robot_ws/build/my_robot && ../catkin_generated/env_cached.sh /usr/bin/python /opt/ros/kinetic/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py my_robot /home/tran/github/robot_ws/src/my_robot/msg/ackermann.msg geometry_msgs/Point
+	cd /home/tran/github/robot_ws/build/my_robot && ../catkin_generated/env_cached.sh /usr/bin/python /opt/ros/kinetic/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py my_robot /home/tran/github/robot_ws/src/my_robot/msg/ackermann.msg geometry_msgs/Quaternion:geometry_msgs/PoseStamped:geometry_msgs/Pose:std_msgs/Header:geometry_msgs/Point
 
 _my_robot_generate_messages_check_deps_ackermann: my_robot/CMakeFiles/_my_robot_generate_messages_check_deps_ackermann
 _my_robot_generate_messages_check_deps_ackermann: my_robot/CMakeFiles/_my_robot_generate_messages_check_deps_ackermann.dir/build.make

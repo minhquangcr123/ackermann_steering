@@ -37,7 +37,7 @@ class ackermann {
     // Serialize the length for message field [points]
     bufferOffset = _serializer.uint32(obj.points.length, buffer, bufferOffset);
     obj.points.forEach((val) => {
-      bufferOffset = geometry_msgs.msg.Point.serialize(val, buffer, bufferOffset);
+      bufferOffset = geometry_msgs.msg.PoseStamped.serialize(val, buffer, bufferOffset);
     });
     return bufferOffset;
   }
@@ -51,14 +51,16 @@ class ackermann {
     len = _deserializer.uint32(buffer, bufferOffset);
     data.points = new Array(len);
     for (let i = 0; i < len; ++i) {
-      data.points[i] = geometry_msgs.msg.Point.deserialize(buffer, bufferOffset)
+      data.points[i] = geometry_msgs.msg.PoseStamped.deserialize(buffer, bufferOffset)
     }
     return data;
   }
 
   static getMessageSize(object) {
     let length = 0;
-    length += 24 * object.points.length;
+    object.points.forEach((val) => {
+      length += geometry_msgs.msg.PoseStamped.getMessageSize(val);
+    });
     return length + 4;
   }
 
@@ -69,13 +71,43 @@ class ackermann {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return '3fb3f9dacc279b964c4c8341122c34df';
+    return '0ac6d244346982eba936c77e43e67b98';
   }
 
   static messageDefinition() {
     // Returns full string definition for message
     return `
-    geometry_msgs/Point[] points
+    geometry_msgs/PoseStamped[] points
+    
+    ================================================================================
+    MSG: geometry_msgs/PoseStamped
+    # A Pose with reference coordinate frame and timestamp
+    Header header
+    Pose pose
+    
+    ================================================================================
+    MSG: std_msgs/Header
+    # Standard metadata for higher-level stamped data types.
+    # This is generally used to communicate timestamped data 
+    # in a particular coordinate frame.
+    # 
+    # sequence ID: consecutively increasing ID 
+    uint32 seq
+    #Two-integer timestamp that is expressed as:
+    # * stamp.sec: seconds (stamp_secs) since epoch (in Python the variable is called 'secs')
+    # * stamp.nsec: nanoseconds since stamp_secs (in Python the variable is called 'nsecs')
+    # time-handling sugar is provided by the client library
+    time stamp
+    #Frame this data is associated with
+    # 0: no frame
+    # 1: global frame
+    string frame_id
+    
+    ================================================================================
+    MSG: geometry_msgs/Pose
+    # A representation of pose in free space, composed of position and orientation. 
+    Point position
+    Quaternion orientation
     
     ================================================================================
     MSG: geometry_msgs/Point
@@ -83,6 +115,15 @@ class ackermann {
     float64 x
     float64 y
     float64 z
+    
+    ================================================================================
+    MSG: geometry_msgs/Quaternion
+    # This represents an orientation in free space in quaternion form.
+    
+    float64 x
+    float64 y
+    float64 z
+    float64 w
     
     `;
   }
@@ -96,7 +137,7 @@ class ackermann {
     if (msg.points !== undefined) {
       resolved.points = new Array(msg.points.length);
       for (let i = 0; i < resolved.points.length; ++i) {
-        resolved.points[i] = geometry_msgs.msg.Point.Resolve(msg.points[i]);
+        resolved.points[i] = geometry_msgs.msg.PoseStamped.Resolve(msg.points[i]);
       }
     }
     else {

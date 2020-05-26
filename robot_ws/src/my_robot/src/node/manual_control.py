@@ -93,9 +93,10 @@ class Ackermann(object):
     def callback(self, data):
         self._steer_ang = data.angular.z / 1 * (math.pi/4)
         self._speed = data.linear.x  * 10
-        print(self._speed)
+        print(self._steer_ang)
 
     def spin(self) :
+        #rospy.Subscriber("/cmd_vel", Twist, self.callback)
         rospy.Subscriber("/cmd_vel_mux/input/teleop", Twist, self.callback)
         last_time = rospy.get_time()
         while not rospy.is_shutdown():
