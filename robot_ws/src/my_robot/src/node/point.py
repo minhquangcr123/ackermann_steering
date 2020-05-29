@@ -14,6 +14,7 @@ from obstacle_detector.msg import Obstacles,CircleObstacle,SegmentObstacle
 from gazebo_msgs.srv import GetModelState, GetModelStateRequest
 import message_filters
 from sensor_msgs.msg import LaserScan
+import matplotlib.pyplot as plt
 
 def distance_norm2(p1, p2):
   return np.sqrt((p1[0] - p2[0]) ** 2+ (p1[1] - p2[1])** 2)
@@ -27,20 +28,29 @@ class Cal_point():
   def __init__(self, mode):
     rospy.init_node("objetct", disable_signals=True)
     self.point_seq_obs = [] # Declare Instance attribute
-
+    self.mode = mode
     self.sub_object = message_filters.Subscriber("raw_obstacles", Obstacles)
     self.sub_laser = message_filters.Subscriber("scan", LaserScan)
-    
-    ts = message_filters.TimeSynchronizer([self.sub_object, self.sub_laser], 10)
-    ts.registerCallback(self.callback)
-    rospy.spin()
-       #print(self.point_seq_obs)
-    all_point, a_object = self.return_list_point()
-    print(a_object)
 
-    self.point_seq_obs = a_object #[[x,y],[x,y], ...[x,y]]
-    self.mode = mode
-    self.point_move = []
+    ts = message_filters.TimeSynchronizer([self.sub_object, self.sub_laser], 10)
+    self.signal_laser_plot = []
+    if self.mode == "slalom" or self.mode == "slalom2" or self.mode == "parking":
+      ts.registerCallback(self.callback)
+      rospy.spin()
+        #print(self.point_seq_obs)
+      all_point, a_object = self.return_list_point()
+      print(a_object)
+
+      self.point_seq_obs = a_object #[[x,y],[x,y], ...[x,y]]
+      self.point_move = []
+    
+    elif self.mode == "all":
+      self.laser_sub = rospy.Subscriber("/scan", LaserScan, self.callback_mode_all)
+      rospy.spin()
+      #print(self.signal_laser_plot)
+      plt.plot(np.arange(0,len(self.signal_laser_plot[1])), self.signal_laser_plot[1])
+      plt.show()
+      
 
     if self.mode == "slalom":
       self.mode_slolam()
@@ -49,33 +59,63 @@ class Cal_point():
       # condition for denois and take object point
       rospy.set_param("move_seq_object", "{}".format(self.point_move))
       rospy.set_param("num_object", "{}".format(len(a_object)))
+    
     elif self.mode == "parking":
-      self.mode_parking()
+
+      self.calculate_point_parking(self.point_seq_obs)
+      print(self.point_move)
+      rospy.set_param("move_seq_object", "{}".format(self.point_move))  
+    
     elif self.mode == "slalom2":
       self.mode_slalom2()
       print(self.point_move)
       rospy.set_param("move_seq_object", "{}".format(self.point_move))
-      rospy.set_param("num_object", len(a_object))
-      rospy.set_param("object_position", a_object)
     else:
       print("No Action given !")
+
+  def callback_mode_all(self, data_laser):
+    self.signal_laser_plot.append(data_laser.ranges)
+    print(data_laser)
+
+
+  def callback(self,data_obj, data_laser ):
+    if data_obj.circles:
+      print(data_obj.circles)
+      for circle in data_obj.circles:
+          self.point_seq_obs.append([circle.center.x, circle.center.y])  
 
   def mode_slalom2(self):
     p1 = self.point_seq_obs[0]; 
     p2 = self.point_seq_obs[1]
-
     a = float(p2[0] - p1[0]); b = float(p2[1] - p1[1]);
     x = (p1[0] * 2 - p2[0]); y = (p1[1] * 2 - p2[1]) ;
     angle = math.degrees(math.acos((a)/ (np.sqrt(a ** 2 + b **2 ))))
 
     self.point_move.append([x,y,angle])
 
-  def callback(self,data_obj, data_laser ):
-    if data_obj.circles:
-      print(data_obj.circles)
-      for circle in data_obj.circles:
-          self.point_seq_obs.append([circle.center.x, circle.center.y])      
+  
+  def calculate_point_parking(self, object_obstacles):
+    print(object_obstacles)
+    if object_obstacles[0][1] > object_obstacles[1][1]:
+        p0 = object_obstacles[0]; p1 = object_obstacles[1] 
+    else:
+        p0 = object_obstacles[1]; p1 = object_obstacles[0] 
+        
+    xt = p0[0]; yt = p0[1]; xs = p1[0]; ys =p1[1] #vector direction 
+    x,y  = symbols("x y")
+
+    a = yt - ys; b = -(xt-xs); c = -(yt-ys) * xt + (xt-xs) * yt
+    eq1 = ((xt -xs) * (x - xt) + (yt - ys)*(y - yt))
+    eq2 = ((a *x + b*y + c )/(np.sqrt(a ** 2 + b ** 2)) - 2)
+
+    sol_dict = solve((eq1, eq2), (x ,y))
+    x_move = sol_dict[x]; y_move = sol_dict[y]; 
     
+    angle_move = math.degrees(math.atan2((yt - ys), (xt -xs)))
+    print(angle_move)
+
+    self.point_move.append([x_move, y_move, angle_move])
+    #return []
 
   def return_list_point(self):
     index = 0
@@ -143,13 +183,8 @@ class Cal_point():
             break"""
   
   
-
-  def mode_parking(self):
-    p1 = self.point_seq_obs[0]; p2 = self.point_seq_obs[1]
-    x = float(p1[0] + p2[0]) / 2 ; y = float(p1[1]  + p2[1]) / 2
-    a = float(p2[0] - p1[0]); b = float(p2[1] - p1[1]);
-    angle = angle1 = math.degrees(math.acos((a)/ (np.sqrt(a ** 2 + b **2 ))))
-    self.point_move.append([x,y, angle])
+  def mode_modern(self):
+    pass
 
   def mode_slolam(self):
     biendoi = -1
@@ -192,6 +227,6 @@ class Cal_point():
 
 if __name__ == "__main__":
   #p_obs = [[0.9,7.7],[-2.47, 7.85]] #Gui toa do vat can
-  def_point = Cal_point("slalom2") 
+  def_point = Cal_point("all") 
 
   #result = publish_goal_action()

@@ -24,7 +24,6 @@ def move_slalom():
 
 def get_move_param():
     results = []
-    obstacles = rospy.get_param("object_position")
     if len(obstacles) > 2:
         param = rospy.get_param('move_seq_object') # [[x1,y1,ang1], [x2,y2,ang2], ...,[xn,yn,angn]]
     
@@ -37,7 +36,7 @@ def get_move_param():
             results.append(element)
 
     results = [[float(ele.split(',')[0]), float(ele.split(',')[1]), float(ele.split(',')[2])] for ele in results]
-    return results, obstacles
+    return results
 
 class Move_seq():
     def __init__(self, point_move, num_object):
@@ -162,15 +161,5 @@ def calculate_point_parking(object_obstacles):
     return [[x_move, y_move, angle_move]]
 
 if __name__ == "__main__":
-    move_seq, object_seq = get_move_param() # get move slalom from move_slalom.py
-    num_object = len(object_seq)
-    if num_object < 2 :
-        print("Not enough point for move !")
-    elif num_object == 2 :
-        move_seq = calculate_point_parking(object_seq)
-        print(move_seq)
-        move_seq[0][2] = -move_seq[0][2]
-        print(move_seq)
-        Move_seq(move_seq, num_object)
-    else:
-        Move_seq(move_seq, num_object)
+    move_seq = get_move_param() # get move slalom from point.py
+    Move_seq(move_seq, num_object)

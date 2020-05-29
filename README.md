@@ -1,6 +1,25 @@
 # ackermann_steering
-* USAGES *
+## Setup work flow
+### Open terminal and mkdir 1 dictionary for project (installed virtualenv first)
+```
+mkdir -p project_ackermann
+cd /project_ackermann
+virtualenv project_env #virtual enviroment
+cd /project_env
+source ./bin/activate #activate enviroment
+git clone https://github.com/minhquangcr123/ackermann_steering
+pip install -r requirement # install package, dependiences. 
+cd #Back to root direction
+gedit .bashrc # Open file .bashrc
+```
+coppy three line to .bashrc file and save
 
+```
+source ~/catkin_ws/devel/setup.bash to 
+coppy export GAZEBO_MODEL_PATH=/home/tran/github/model_building
+export GAZEBO_RESOURCE_PATH=/home/tran/github/robot_ws/src/my_robot/src
+```
+## Usages
 - roscore
 - roslaunch my_robot gazebo_launch.launch 				(Turn on gazebo simulation)
 - roslaunch my_robot controller.launch	 				(Turn on controller for simulation)
