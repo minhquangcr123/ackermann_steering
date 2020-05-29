@@ -116,6 +116,7 @@ scans_merger_EXTERNAL_OBJECTS =
 /home/tran/github/robot_ws/devel/lib/libscans_merger.so: /usr/lib/x86_64-linux-gnu/liburdfdom_world.so
 /home/tran/github/robot_ws/devel/lib/libscans_merger.so: /usr/lib/x86_64-linux-gnu/libtinyxml.so
 /home/tran/github/robot_ws/devel/lib/libscans_merger.so: /opt/ros/kinetic/lib/librosconsole_bridge.so
+/home/tran/github/robot_ws/devel/lib/libscans_merger.so: /opt/ros/kinetic/lib/liblaser_geometry.so
 /home/tran/github/robot_ws/devel/lib/libscans_merger.so: /opt/ros/kinetic/lib/libtf.so
 /home/tran/github/robot_ws/devel/lib/libscans_merger.so: /opt/ros/kinetic/lib/libtf2_ros.so
 /home/tran/github/robot_ws/devel/lib/libscans_merger.so: /opt/ros/kinetic/lib/libactionlib.so
@@ -124,23 +125,22 @@ scans_merger_EXTERNAL_OBJECTS =
 /home/tran/github/robot_ws/devel/lib/libscans_merger.so: /usr/lib/x86_64-linux-gnu/libboost_filesystem.so
 /home/tran/github/robot_ws/devel/lib/libscans_merger.so: /usr/lib/x86_64-linux-gnu/libboost_signals.so
 /home/tran/github/robot_ws/devel/lib/libscans_merger.so: /opt/ros/kinetic/lib/libxmlrpcpp.so
-/home/tran/github/robot_ws/devel/lib/libscans_merger.so: /opt/ros/kinetic/lib/libtf2.so
-/home/tran/github/robot_ws/devel/lib/libscans_merger.so: /opt/ros/kinetic/lib/libroscpp_serialization.so
 /home/tran/github/robot_ws/devel/lib/libscans_merger.so: /opt/ros/kinetic/lib/librosconsole.so
 /home/tran/github/robot_ws/devel/lib/libscans_merger.so: /opt/ros/kinetic/lib/librosconsole_log4cxx.so
 /home/tran/github/robot_ws/devel/lib/libscans_merger.so: /opt/ros/kinetic/lib/librosconsole_backend_interface.so
 /home/tran/github/robot_ws/devel/lib/libscans_merger.so: /usr/lib/x86_64-linux-gnu/liblog4cxx.so
 /home/tran/github/robot_ws/devel/lib/libscans_merger.so: /usr/lib/x86_64-linux-gnu/libboost_regex.so
+/home/tran/github/robot_ws/devel/lib/libscans_merger.so: /opt/ros/kinetic/lib/libtf2.so
+/home/tran/github/robot_ws/devel/lib/libscans_merger.so: /opt/ros/kinetic/lib/libroscpp_serialization.so
 /home/tran/github/robot_ws/devel/lib/libscans_merger.so: /opt/ros/kinetic/lib/librostime.so
 /home/tran/github/robot_ws/devel/lib/libscans_merger.so: /opt/ros/kinetic/lib/libcpp_common.so
-/home/tran/github/robot_ws/devel/lib/libscans_merger.so: /usr/lib/x86_64-linux-gnu/libconsole_bridge.so
-/home/tran/github/robot_ws/devel/lib/libscans_merger.so: /opt/ros/kinetic/lib/liblaser_geometry.so
 /home/tran/github/robot_ws/devel/lib/libscans_merger.so: /usr/lib/x86_64-linux-gnu/libboost_system.so
 /home/tran/github/robot_ws/devel/lib/libscans_merger.so: /usr/lib/x86_64-linux-gnu/libboost_thread.so
 /home/tran/github/robot_ws/devel/lib/libscans_merger.so: /usr/lib/x86_64-linux-gnu/libboost_chrono.so
 /home/tran/github/robot_ws/devel/lib/libscans_merger.so: /usr/lib/x86_64-linux-gnu/libboost_date_time.so
 /home/tran/github/robot_ws/devel/lib/libscans_merger.so: /usr/lib/x86_64-linux-gnu/libboost_atomic.so
 /home/tran/github/robot_ws/devel/lib/libscans_merger.so: /usr/lib/x86_64-linux-gnu/libpthread.so
+/home/tran/github/robot_ws/devel/lib/libscans_merger.so: /usr/lib/x86_64-linux-gnu/libconsole_bridge.so
 /home/tran/github/robot_ws/devel/lib/libscans_merger.so: obstacle_detector/CMakeFiles/scans_merger.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/tran/github/robot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX shared library /home/tran/github/robot_ws/devel/lib/libscans_merger.so"
 	cd /home/tran/github/robot_ws/build/obstacle_detector && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/scans_merger.dir/link.txt --verbose=$(VERBOSE)

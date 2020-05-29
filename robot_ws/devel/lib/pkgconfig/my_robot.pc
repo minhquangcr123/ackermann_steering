@@ -4,5 +4,5 @@ Name: my_robot
 Description: Description of my_robot
 Version: 0.0.0
 Cflags: -I/home/tran/github/robot_ws/devel/include
-Libs: -L/home/tran/github/robot_ws/devel/lib 
+Libs: -L${prefix}/lib 
 Requires: rospy std_msgs geometry_msgs message_runtime

@@ -645,6 +645,8 @@ Eigen/Core
 -
 sensor_msgs/PointCloud2.h
 -
+ros/macros.h
+-
 
 /opt/ros/kinetic/include/nodelet/exception.h
 stdexcept

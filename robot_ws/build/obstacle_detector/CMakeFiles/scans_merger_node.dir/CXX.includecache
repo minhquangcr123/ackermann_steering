@@ -371,6 +371,8 @@ Eigen/Core
 -
 sensor_msgs/PointCloud2.h
 -
+ros/macros.h
+-
 
 /opt/ros/kinetic/include/ros/advertise_options.h
 ros/forwards.h
