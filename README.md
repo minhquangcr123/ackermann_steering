@@ -16,8 +16,8 @@ coppy three line to .bashrc file and save
 
 ```
 source ~/catkin_ws/devel/setup.bash 
-export GAZEBO_MODEL_PATH= ~/model_building
-export GAZEBO_RESOURCE_PATH= ~/robot_ws/src/my_robot/src
+export GAZEBO_MODEL_PATH=~/model_building
+export GAZEBO_RESOURCE_PATH=~/robot_ws/src/my_robot/src
 ```
 Then go to catkin workspace and run makefile
 ```
