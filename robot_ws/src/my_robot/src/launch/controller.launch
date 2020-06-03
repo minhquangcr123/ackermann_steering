@@ -1,4 +1,4 @@
 <launch>
-<node name ="control" pkg="my_robot" type="control.py" output = "screen"/>
 <include file="$(find my_robot)/src/launch/map.launch"/>
+<node name ="control" pkg="my_robot" type="control.py" output = "screen"/>
 </launch>
