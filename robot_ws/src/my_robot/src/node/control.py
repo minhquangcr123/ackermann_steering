@@ -27,10 +27,19 @@ class Ackermann(object):
         #Set defaut parameters
         self.D_dia = 1.0
         self.time_out = 1.0
-        self.frequency = rospy.Rate(30.0)
+        self.frequency = rospy.Rate(10.0)
         self._cmd_timeout = 60* 10
         self.point = []
         self.odom_car = []
+
+        #initialize for visualize a path moved
+        self.path_moved = Path()
+        self.path_moved.header.frame_id = "path_moved"
+        self.path_moved.header.stamp = rospy.Time.now()
+
+        #broadcaster transform
+        self.broadcaster = tf.TransformBroadcaster()
+        
         #get parameters 
         (self.left_steering_name, self.left_steering_ctrlr_name, 
         self.left_front_axle_ctrlr_name, self.left_front_iv_cir, self.left_rear_link_name, self.left_rear_axle_ctrlr_name, self.left_rear_iv_cir) = self.get_wheel_param("left") 
@@ -81,7 +90,7 @@ class Ackermann(object):
         front_center = (cor_left_steer + cor_right_steer) / 2
         rear_center = (lrw_coor + rrw_coor) / 2
         self.wheel_base = np.linalg.norm(front_center - rear_center)
-
+        
         self.inv_wheel_base =  1 / self.wheel_base
         self.square_wheel_base = self.wheel_base ** 2
 
@@ -93,10 +102,10 @@ class Ackermann(object):
         self.right_front_axle_pub = self.creat_cmd_pub(respone, self.right_front_axle_ctrlr_name)
         self.left_rear_axle_pub = self.creat_cmd_pub(respone, self.left_rear_axle_ctrlr_name)
         self.right_rear_axle_pub = self.creat_cmd_pub(respone, self.right_rear_axle_ctrlr_name)
-
+        
     def callback(self, data):
-        self._steer_ang = data.angular.z * 2
-        self._speed = data.linear.x  *  4
+        self._steer_ang = data.angular.z 
+        self._speed = data.linear.x 
         #print(self._steer_ang, self._speed)
 
     def callback_scan(self, data_scan):
@@ -109,7 +118,10 @@ class Ackermann(object):
         
 
         last_time = rospy.get_time()
+        begin_time = last_time
+
         while not rospy.is_shutdown():
+            
             rospy.Subscriber("/cmd_vel", Twist, self.callback)
             rospy.Subscriber("/scan", LaserScan, self.callback_scan)
             #print(self.wheel_base)
@@ -143,8 +155,41 @@ class Ackermann(object):
             #print(self._left_front_ang_vel,self._right_front_ang_vel,self._left_rear_ang_vel,self._right_rear_ang_vel)
             
             self.tranform()
+            self.visualize_path()
             self.frequency.sleep()
     
+    def visualize_path(self):
+        pub_path_moved = rospy.Publisher("path_moved", Path, queue_size= 10)
+        rospy.wait_for_service("/gazebo/get_model_state")
+        get_model_respone = rospy.ServiceProxy("gazebo/get_model_state", GetModelState)            
+        header = Header()
+        header.frame_id = "/odom"
+        header.stamp = rospy.Time.now()
+        model = GetModelStateRequest()
+        model.model_name = "ackerman"
+        result = get_model_respone(model)
+            
+        odom = Odometry()
+        odom.header = header
+        odom.pose.pose = result.pose
+        odom.twist.twist = result.twist
+        quat = [0,0, odom.pose.pose.orientation.z, odom.pose.pose.orientation.w]
+        quat = quat / np.linalg.norm(quat)
+        #odom_angle = tf.transformations.euler_from_quaternion([0, 0, quat[2], quat[3]])
+        
+        pose_moved = PoseStamped()
+        pose_moved.header.frame_id = "navigation_point"
+        pose_moved.header.stamp = rospy.Time.now()
+        pose_moved.pose.position.x = odom.pose.pose.position.x
+        pose_moved.pose.position.y = odom.pose.pose.position.y
+        pose_moved.pose.orientation.w = quat[2]
+        pose_moved.pose.orientation.z = quat[3]
+
+        self.path_moved.poses.append(pose_moved)
+        self.broadcaster.sendTransform((0.0, 0.0, 0.0),(0.0,0.0,0.0,1.0),
+                            rospy.Time.now(),"path_moved", "map")
+        pub_path_moved.publish(self.path_moved)
+        
 
     def tranform(self):
         odom_pub = rospy.Publisher("/my_odom", Odometry, queue_size = 10)
@@ -166,10 +211,17 @@ class Ackermann(object):
         odom.pose.pose = result.pose
         odom.twist.twist = result.twist
         quat = [0,0, odom.pose.pose.orientation.z, odom.pose.pose.orientation.w]
+        angle = np.array(tf.transformations.euler_from_quaternion(quat))
+        """print(angle)
+        angle[2] = angle[2] + math.pi
+        print(angle)
+        quat = tf.transformations.quaternion_from_euler(angle[0], angle[1], angle[2])"""
         quat = quat / np.linalg.norm(quat)
-        #odom_quat = tf.transformations.quaternion_from_euler(0, 0, odom.pose.pose.orientation.z)
         odom_broadcaster.sendTransform((odom.pose.pose.position.x, odom.pose.pose.position.y, 0), 
-                                            (0, 0, quat[2], quat[3]), rospy.Time.now(), "base_link","odom")
+                                            (0, 0, quat[2], quat[3]), rospy.Time.now(), "base_link", "map")
+                                           
+        odom_broadcaster.sendTransform((0, 0, 0), 
+                                            (0, 0, 0,  1), rospy.Time.now(), "odom", "map")                                   
         odom_pub.publish(odom)
         self.odom_car=[odom.pose.pose.position.x, odom.pose.pose.position.y, quat[2], quat[3]]
 
@@ -195,7 +247,7 @@ class Ackermann(object):
                 gain = (2 * math.pi) * veh_speed / abs(center_y)
                 #gain =  veh_speed / abs(center_y)
                 r_in = np.linalg.norm(left_dist ** 2 + self.square_wheel_base)
-                self._left_front_ang_vel = gain * r_in* self.left_front_iv_cir # v_angle = v_linear * omega = v_linear * 2 pi / T
+                self._left_front_ang_vel = gain * r_in * self.left_front_iv_cir # v_angle = v_linear * omega = v_linear * 2 pi / T
                 
                 r_out = np.linalg.norm(right_dist ** 2 + self.square_wheel_base)
                 self._right_front_ang_vel = gain * r_out * self.right_front_iv_cir
@@ -212,7 +264,7 @@ class Ackermann(object):
                 left_dist = center_y - self.dis_stee_div2
                 right_dist = center_y + self.dis_stee_div2
 
-                gain = (2 * math.pi) * veh_speed / abs(center_y) / 50
+                gain = (2 * math.pi) * veh_speed / abs(center_y) 
                 self._left_rear_ang_vel = gain * left_dist * self.left_front_iv_cir
                 self._right_rear_ang_vel = gain * right_dist * self.left_front_iv_cir
                 self._left_front_ang_vel = gain * left_dist * self.left_front_iv_cir
@@ -226,7 +278,7 @@ class Ackermann(object):
             theta = self._last_steer_ang + angle_vel * delta_t
         else :
             theta = steer_ang #limit control angle theta
-        center_y = self.wheel_base * math.tan(math.pi/2 - theta)
+        center_y = self.wheel_base * math.tan((math.pi/2) - theta)
         steer_anl_changed = theta != self._last_steer_ang
         if steer_anl_changed :
             self._last_steer_ang = theta

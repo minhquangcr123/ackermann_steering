@@ -18,7 +18,7 @@ import skfuzzy as fuzzy
 from skfuzzy import control as ctrl
 import matplotlib.pyplot as plt
 import time
-
+import sys
 
 def get_move_param():
     results = []
@@ -191,23 +191,20 @@ def visualize_path_moved(path_moved ,odom_moved):
 
 def move_robot(linear_x, angular_z):
     velocity_ = Twist()
-    if abs(angular_z) > 0.75:
-        if abs(linear_x) > 0.5:
-            linear_x = linear_x / linear_x * abs(linear_x)
+    """if abs(angular_z) > 0.75:
         velocity_.linear.x = linear_x
-        velocity_.angular.z = (angular_z / angular_z) * 0.75
-    else:
-        if abs(linear_x) > 0.5:
-            linear_x = linear_x / linear_x * abs(linear_x)
-        velocity_.linear.x = linear_x
-        velocity_.angular.z = angular_z
+        velocity_.angular.z = (angular_z / angular_z) * angular_z
+    else:"""
+    velocity_.linear.x = linear_x
+    velocity_.angular.z = angular_z
         
     pub_velocity.publish(velocity_)
 
 def calculate_path():
-    obstacles = rospy.get_param("object_position")
-    p0 = obstacles[0]; p1 = obstacles[-1]
-
+    """obstacles = rospy.get_param("object_position")
+    p0 = obstacles[0]; p1 = obstacles[-1]"""
+    p0 = [2.96, 7.96]; p1 = [-3, 8]
+    
     path = Path()
     path.header.frame_id = "path_test"
     path.header.stamp = rospy.Time.now()
@@ -304,34 +301,6 @@ def plot_data(data): #data [[x,y,a,t], [x_1,y_1,a_1,t_1] ...]
     plt.title("angular_velocity")
     plt.plot(time_plot, angular_velo)
     plt.show()
-#Action 
-rospy.init_node("visual_path")
-br = tf.TransformBroadcaster()
-rate = rospy.Rate(100)
-
-#move_points, num_obstacles = get_move_param() #movepoint([[x,y,angle], ..])    num_obstacles : integer
-pub_path = rospy.Publisher("path", Path,queue_size= 10)
-pub_velocity = rospy.Publisher("cmd_vel", Twist, queue_size= 10)
-pub_path_moved = rospy.Publisher("path_moved", Path, queue_size= 10)
-
-#move_seq, object_seq = get_move_param() #param move_seq is started point #movepoint([[x,y,angle], ..]) 
-path = calculate_path()
-rate.sleep()
-#path_moved_visualize
-path_moved = Path()
-path_moved.header.frame_id = "path_moved"
-path_moved.header.stamp = rospy.Time.now()
-
-index_p_m = 1 #index of moving point in path. Initial : 0
-time_begin = time.time()
-last_t = time_begin
-time_move_done = 100.0
-time_first_point = 10.0
-
-pid_x = PID_control_clas(1.0, 0., 0.00000) #0.00001
-pid_y = PID_control_clas(1.0, 0., 0.00000)
-pid_angular = PID_control_clas(1., 0., 0.0)
-data = []
 
 def get_coor_dinates():
     name_r = "/left_rear_wheel/link_name" 
@@ -346,9 +315,43 @@ def get_coor_dinates():
     #print(trans)
     return np.array(trans1), np.array(trans2)
             
+def move_to_point(time , x_init , y_init, theta_init, x_goal , y_goal,  theta ):
+    len_wheelbase = 0.335
+    v_linear = np.sqrt(((x_goal- x_init) /time) ** 2 + ((y_goal-y_init) / time) ** 2)
+    v_angular = math.atan( len_wheelbase / v_linear * ((theta - theta_init)/ time))  
+    return v_linear, v_angular
 
+#Action 
+rospy.init_node("visual_path")
+br = tf.TransformBroadcaster()
+rate = rospy.Rate(100)
+
+#move_points, num_obstacles = get_move_param() #movepoint([[x,y,angle], ..])    num_obstacles : integer
+pub_path = rospy.Publisher("path", Path,queue_size= 10)
+pub_velocity = rospy.Publisher("cmd_vel", Twist, queue_size= 10)
+pub_path_moved = rospy.Publisher("path_moved", Path, queue_size= 10)
+
+#move_seq, object_seq = get_move_param() #param move_seq is started point #movepoint([[x,y,angle], ..]) 
+path = calculate_path()
+rate.sleep()
+index_p_m = 1 #index of moving point in path. Initial : 0
+
+time_move_done = 100.0
+time_first_point = 5.0
+
+pid_x = PID_control_clas(1.0, 0., 0.00000) #0.00001
+pid_y = PID_control_clas(1.0, 0., 0.00000)
+pid_angular = PID_control_clas(1., 0., 0.0)
+data = []
+
+
+time_begin = rospy.get_time()
+last_time = time_begin
+rate = rospy.Rate(10)
+time_move = 5.0
+cnt = 1
 while not rospy.is_shutdown():
-    time_current = time.time()
+    time_current = rospy.get_time()
 
     pub_path.publish(path) #visualize path for move
     br.sendTransform((0.0, 0.0, 0.0),(0.0,0.0,0.0,1.0),
@@ -357,69 +360,18 @@ while not rospy.is_shutdown():
     # Calculate error
     time_span = np.linspace(time_begin + time_first_point, time_begin + time_first_point + time_move_done, len(path.poses)) #calculate t_i with each point in path 
     time_span = np.insert(time_span, 0, time_begin)
-    #time_span.insert(0, time_begin)
     odom = take_odomemetry() #[x,y,angle]
-    visualize_path_moved(path_moved, odom)   #visualize path robot have moved
-    odom_r, odom_l = get_coor_dinates() #rear odometry of car
-    odom_rear = (odom_r + odom_l)/2
-    x = odom_rear[0]; y = odom_rear[1]; angle = odom[2]; #take odometry
-    angular_p = [0,0, path.poses[index_p_m].pose.orientation.z, path.poses[index_p_m].pose.orientation.w]
-    angular_p = tf.transformations.euler_from_quaternion(angular_p)[-1]
-    two_angular = [angular_p, angle]
-    #tranlate angular to 0 -> pi ( before translate : angular have values (0 -> +180, 0 -> -180 )  )
-    for index,ang in enumerate(two_angular):
-        if ang < 0:
-            two_angular[index] = 2 * math.pi + ang
-
-    error_angular = two_angular[0] - two_angular[1] #error angular
-    error_distance_x = path.poses[index_p_m].pose.position.x - x
-    error_distance_y = path.poses[index_p_m].pose.position.y - y
-    #print(error_distance_x, error_distance_y)
-    error_distance = np.sqrt(error_distance_x ** 2 + error_distance_y ** 2)
-    delta_t_desire = time_span[index_p_m] - time_current # time beetween desired moving point and feedback odom 
-    
-    v_linear = np.sqrt((error_distance_x / delta_t_desire ) ** 2 + (error_distance_y / delta_t_desire) ** 2)
-    v_omega = math.atan((error_angular * 0.335004153719)/ (delta_t_desire * v_linear)) # 0.335004153719 lenght car chassis
-
-    
-    #calculate velocity for move robot
-    if index_p_m == (len(path.poses) - 1 ): # stop robot when reach goal
-        move_robot(0.0, 0.0) 
-    else:
-        output_velocity_x = pid_x.update(time_current, last_t, error_distance_x)
-        #output_velocity_x = PID_control(time_current, last_t, 1., 0., 0, error_distance_x)
-        output_velocity_y = pid_y.update(time_current, last_t, error_distance_y)
-        #output_velocity_y = PID_control(time_current, last_t, 2., 0. , 0, error_distance_y)
-        v_linear = np.sqrt((output_velocity_x / delta_t_desire ) ** 2 + (output_velocity_y / delta_t_desire) ** 2)
-        output_angular = pid_angular.update(time_current, last_t, error_angular)
-        #output_angular = PID_control(time_current, last_t, 2 , 0.0 ,0 ,error_angular)
-        v_omega = math.atan((output_angular * 0.335004153719)/ (delta_t_desire * v_linear)) # 0.335004153719 lenght car chassis
-        # take data for plot
-        data.append([error_distance, error_angular, time_current, v_omega])
-        
-        print("sai so giua hien tai va thoi gian mong muon:{}".format(delta_t_desire))
-        print("diem :{} \nsai so khoang cach :{} \nsai so goc: {} \ntoc do :{}, {}".format(index_p_m, error_distance, math.degrees(error_angular), v_omega, v_linear))
-        print("\n")
-        if v_linear > 0.6:
-            move_robot(0.0,0.0)
-            break
-        """
-        if index_p_m > 1:#
-            move_robot(0.0, 0.0)
-            break"""
-        #if abs(error_distance_x)  < 0.2 and abs(error_distance_y) < 0.2:
-        if abs(error_angular)  < 5.0 and error_distance < 0.2 or delta_t_desire < 1.0 :
-            move_robot(0.0, 0.0)
-            index_p_m +=1
-        
-        move_robot(v_linear, v_omega)
-        #move_robot(output_velocity / delta_t, output_angular/ delta_t)
-            
-    
-    last_t = time_current
+    """odom_r, odom_l = get_coor_dinates() #rear odometry of car"""
+    x_goal  = path.poses[1].pose.position.x
+    y_goal  = path.poses[1].pose.position.y
+    theta_goal = tf.transformations.euler_from_quaternion([0, 0, path.poses[1].pose.orientation.w, path.poses[1].pose.orientation.z])
+    v_li, v_an = move_to_point(time_span[1] - time_span[0], odom[0], odom[1], odom[2], x_goal, y_goal, theta_goal[2] )
+    print(v_li, v_an, odom[0])
+    move_robot(v_li, v_an)
+    delta_t = time_current - last_time
+    #print(delta_t)
+    if delta_t > time_move :
+        move_robot(0.0, 0.0)
+        break
     rate.sleep()
-print(time_span[1] - time_span[0], time_span[2] - time_span[1])
-plot_data(data)      
-    #plt.show()
-    
 

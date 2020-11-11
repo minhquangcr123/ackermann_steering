@@ -13,33 +13,26 @@ from sympy import symbols, Eq, solve
 
 import rospy
 #[[2.702139790531469, -4.299077367436627, 88.4541277477824]]
-def move_slalom():
-    rospy.init_node("move_seq_action")
-    publish_vel = rospy.Publisher("cmd_vel", Twist, queue_size= 1)
-    while not rospy.is_shutdown():
-        vel = Twist()
-        vel.linear.x = 0.1
-        vel.angular.z = 0.4
-        publish_vel.publish(vel)
+
 
 def get_move_param():
     results = []
-    if len(obstacles) > 2:
-        param = rospy.get_param('move_seq_object') # [[x1,y1,ang1], [x2,y2,ang2], ...,[xn,yn,angn]]
+    param = rospy.get_param('move_seq_object') # [[x1,y1,ang1], [x2,y2,ang2], ...,[xn,yn,angn]]
     
-        #print(param)
-        list_param = param.split("],")
-        for element in list_param:
-            element = element.replace("[","")
-            element = element.replace("]","")
+    print(param)
+    #get param and convert string to list
+    list_param = param.split("],")
+    for element in list_param:
+        element = element.replace("[","")
+        element = element.replace("]","")
         
-            results.append(element)
+        results.append(element)
 
     results = [[float(ele.split(',')[0]), float(ele.split(',')[1]), float(ele.split(',')[2])] for ele in results]
     return results
 
 class Move_seq():
-    def __init__(self, point_move, num_object):
+    def __init__(self, point_move):
         rospy.init_node("move_seq_action")
         self.publish_vel = rospy.Publisher("cmd_vel", Twist, queue_size= 1)
         vel = Twist()
@@ -50,8 +43,8 @@ class Move_seq():
         self.goal_cnt = 0
         self.pose_seq = []
         self.point_move = point_move
-        self.num_object = num_object
         print(self.point_move)
+        
         for point in self.point_move:
             quater = quaternion_from_euler(0, 0, point[2] * math.pi/ 180)
             point_g = Pose()
@@ -102,7 +95,8 @@ class Move_seq():
         vel.linear.x = 0
         vel.linear.z = 0
         return vel
-    def move_slalom_open_loop(self):
+
+""" def move_slalom_open_loop(self):
         count = self.num_object
         time_move = 1.7
         first_time = rospy.get_time()
@@ -138,6 +132,16 @@ class Move_seq():
             
             self.rate.sleep()
             
+
+def move_slalom():
+    rospy.init_node("move_seq_action")
+    publish_vel = rospy.Publisher("cmd_vel", Twist, queue_size= 1)
+    while not rospy.is_shutdown():
+        vel = Twist()
+        vel.linear.x = 0.1
+        vel.angular.z = 0.4
+        publish_vel.publish(vel)
+
 def calculate_point_parking(object_obstacles):
     print(object_obstacles)
     if object_obstacles[0][1] > object_obstacles[1][1]:
@@ -158,8 +162,9 @@ def calculate_point_parking(object_obstacles):
     angle_move = math.degrees(math.atan2((yt - ys), (xt -xs)))
     print(angle_move)
 
-    return [[x_move, y_move, angle_move]]
+    return [[x_move, y_move, angle_move]]"""
 
 if __name__ == "__main__":
-    move_seq = get_move_param() # get move slalom from point.py
-    Move_seq(move_seq, num_object)
+    move_seq = get_move_param()
+    print(move_seq) # get move slalom from point.py
+    Move_seq(move_seq)

@@ -1,0 +1,3 @@
+/home/tran/github/car_package/file_download/build/CMakeFiles/edit_cache.dir
+/home/tran/github/car_package/file_download/build/CMakeFiles/rebuild_cache.dir
+/home/tran/github/car_package/file_download/build/CMakeFiles/ActorCollisionsPlugin.dir

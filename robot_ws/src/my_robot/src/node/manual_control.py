@@ -91,9 +91,9 @@ class Ackermann(object):
         self.right_rear_axle_pub = self.creat_cmd_pub(respone, self.right_rear_axle_ctrlr_name)
 
     def callback(self, data):
-        self._steer_ang = data.angular.z / 1 * (math.pi/4)
-        self._speed = data.linear.x  * 10
-        print(self._steer_ang)
+        self._steer_ang = data.angular.z 
+        self._speed = data.linear.x 
+        print(self._steer_ang, self._speed)
 
     def spin(self) :
         #rospy.Subscriber("/cmd_vel", Twist, self.callback)

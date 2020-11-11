@@ -34,6 +34,7 @@ class Cal_point():
 
     ts = message_filters.TimeSynchronizer([self.sub_object, self.sub_laser], 10)
     self.signal_laser_plot = []
+
     if self.mode == "slalom" or self.mode == "slalom2" or self.mode == "parking":
       ts.registerCallback(self.callback)
       rospy.spin()
@@ -45,10 +46,13 @@ class Cal_point():
       self.point_move = []
     
     elif self.mode == "all":
+      self.all_mode()
+      rospy.set_param("move_seq_object", "{}".format(self.point_move))
+
       self.laser_sub = rospy.Subscriber("/scan", LaserScan, self.callback_mode_all)
       rospy.spin()
-      #print(self.signal_laser_plot)
-      plt.plot(np.arange(0,len(self.signal_laser_plot[1])), self.signal_laser_plot[1])
+      print(len(self.signal_laser_plot))                                                                                     
+      plt.plot(np.arange(0,len(self.signal_laser_plot[-1])), self.signal_laser_plot[-1])
       plt.show()
       
 
@@ -58,21 +62,27 @@ class Cal_point():
       #print(self.point_move)
       # condition for denois and take object point
       rospy.set_param("move_seq_object", "{}".format(self.point_move))
-      rospy.set_param("num_object", "{}".format(len(a_object)))
-    
+      
     elif self.mode == "parking":
-
       self.calculate_point_parking(self.point_seq_obs)
       print(self.point_move)
-      rospy.set_param("move_seq_object", "{}".format(self.point_move))  
+      rospy.set_param("move_seq_object", self.point_move)  
     
     elif self.mode == "slalom2":
       self.mode_slalom2()
-      print(self.point_move)
+      print(self.point_move, self.point_seq_obs)
       rospy.set_param("move_seq_object", "{}".format(self.point_move))
+      rospy.set_param("object_position", self.point_seq_obs)
     else:
       print("No Action given !")
 
+  def all_mode(self):
+    self.point_move = [[20.5, -3.6, tf.transformations.euler_from_quaternion([0, 0 , -0.66763, 0.7448])[2]/ math.pi * 180]
+                        , [20.4, -6.537, tf.transformations.euler_from_quaternion([0, 0 , 0.999, -0.001])[2]/ math.pi * 180]
+                        , [16.8, -9.52, tf.transformations.euler_from_quaternion([0, 0 , -0.03, 0.999412])[2]/ math.pi * 180]
+                        , [20.25, -12.0052, tf.transformations.euler_from_quaternion([0, 0 , 0.99763, -0.0691])[2]/ math.pi * 180]
+                        , [20, -15.0, tf.transformations.euler_from_quaternion([0, 0 , 0.7127, 0.7014])[2]/ math.pi * 180] ]
+    
   def callback_mode_all(self, data_laser):
     self.signal_laser_plot.append(data_laser.ranges)
     print(data_laser)
@@ -83,6 +93,8 @@ class Cal_point():
       print(data_obj.circles)
       for circle in data_obj.circles:
           self.point_seq_obs.append([circle.center.x, circle.center.y])  
+
+
 
   def mode_slalom2(self):
     p1 = self.point_seq_obs[0]; 
@@ -227,6 +239,6 @@ class Cal_point():
 
 if __name__ == "__main__":
   #p_obs = [[0.9,7.7],[-2.47, 7.85]] #Gui toa do vat can
-  def_point = Cal_point("all") 
+  def_point = Cal_point("slalom2") 
 
   #result = publish_goal_action()

@@ -1,16 +1,14 @@
 <launch>
 
 <!-- Load map saved before-->
-<!--node name="map_server" pkg="map_server" type="map_server" output ="screen"
-          args="/home/tran/github/bag_file/map.yaml my_map_resolution">
-</node-->
+<node name="map_server" pkg="map_server" type="map_server" output ="screen"
+          args="/home/tran/github/bag_file/final_map/mymap.yaml my_map_resolution">
+</node>
 
-<!--node name ="amcl" pkg="amcl" type="amcl">
-                <remap from="scan" to="scan"/>
+<node name ="control" pkg="my_robot" type="control.py" output = "screen"/>
 
-</node-->
 
-<!--include file="$(find amcl)/examples/amcl_omni.launch" /-->
+
 
 <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
     <rosparam file="$(find my_robot)/src/config/cost_map_common.yaml" command="load" ns="global_costmap" /> 
@@ -22,16 +20,19 @@
     <param name="controller_frequency" value="10.0" />
  </node>
 
+
  <!--node name="costmap_node" pkg="costmap_2d" type="costmap_2d_node" >
     <rosparam file="$(find my_robot)/src/config/cost_map.yaml" command="load" /> 
 </node-->
 
-<node name ="control" pkg="my_robot" type="control.py" output = "screen"/>
 
-<node pkg="gmapping" type="slam_gmapping" name="gmapping_thing" output="screen" >
+
+<!--node pkg="gmapping" type="slam_gmapping" name="gmapping_thing" output="screen" >
     <param name="scan" value="scan" />
     <param name="odom_frame" value="odom" />
-    <param name="base_frame" value="base_link" />
+    <param name="base_frame" value="base_link"/>
   </node>
+
+<include file="$(find my_robot)/src/launch/controller_manual.launch" /-->
 
 </launch>
