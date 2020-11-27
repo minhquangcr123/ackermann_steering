@@ -1,4 +1,5 @@
 <launch>
+<master auto="start"/>
 <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" value="$(find my_robot)/src/world/first_world.world"/>
 </include>
@@ -21,5 +22,7 @@ args = "
                                 left_rear_shock_ctrlr 
                                 right_rear_shock_ctrlr"/>
 <!--include file="$(find my_robot)/src/launch/controller.launch"/ -->
+
+
 
 </launch>

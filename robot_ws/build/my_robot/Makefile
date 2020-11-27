@@ -79,17 +79,6 @@ rebuild_cache/fast: rebuild_cache
 
 .PHONY : rebuild_cache/fast
 
-# Special rule for the target edit_cache
-edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
-.PHONY : edit_cache
-
-# Special rule for the target edit_cache
-edit_cache/fast: edit_cache
-
-.PHONY : edit_cache/fast
-
 # Special rule for the target test
 test:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
@@ -101,16 +90,16 @@ test/fast: test
 
 .PHONY : test/fast
 
-# Special rule for the target install/strip
-install/strip: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
-	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
-.PHONY : install/strip
+# Special rule for the target edit_cache
+edit_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
+	/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+.PHONY : edit_cache
 
-# Special rule for the target install/strip
-install/strip/fast: install/strip
+# Special rule for the target edit_cache
+edit_cache/fast: edit_cache
 
-.PHONY : install/strip/fast
+.PHONY : edit_cache/fast
 
 # Special rule for the target list_install_components
 list_install_components:
@@ -132,6 +121,17 @@ install/local: preinstall
 install/local/fast: install/local
 
 .PHONY : install/local/fast
+
+# Special rule for the target install/strip
+install/strip: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip
+
+# Special rule for the target install/strip
+install/strip/fast: install/strip
+
+.PHONY : install/strip/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -241,36 +241,6 @@ std_msgs_generate_messages_py/fast:
 .PHONY : std_msgs_generate_messages_py/fast
 
 # Convenience name for target.
-my_robot/CMakeFiles/my_robot_genlisp.dir/rule:
-	cd /home/tran/github/robot_ws/build && $(MAKE) -f CMakeFiles/Makefile2 my_robot/CMakeFiles/my_robot_genlisp.dir/rule
-.PHONY : my_robot/CMakeFiles/my_robot_genlisp.dir/rule
-
-# Convenience name for target.
-my_robot_genlisp: my_robot/CMakeFiles/my_robot_genlisp.dir/rule
-
-.PHONY : my_robot_genlisp
-
-# fast build rule for target.
-my_robot_genlisp/fast:
-	cd /home/tran/github/robot_ws/build && $(MAKE) -f my_robot/CMakeFiles/my_robot_genlisp.dir/build.make my_robot/CMakeFiles/my_robot_genlisp.dir/build
-.PHONY : my_robot_genlisp/fast
-
-# Convenience name for target.
-my_robot/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule:
-	cd /home/tran/github/robot_ws/build && $(MAKE) -f CMakeFiles/Makefile2 my_robot/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
-.PHONY : my_robot/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-std_msgs_generate_messages_cpp: my_robot/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
-
-.PHONY : std_msgs_generate_messages_cpp
-
-# fast build rule for target.
-std_msgs_generate_messages_cpp/fast:
-	cd /home/tran/github/robot_ws/build && $(MAKE) -f my_robot/CMakeFiles/std_msgs_generate_messages_cpp.dir/build.make my_robot/CMakeFiles/std_msgs_generate_messages_cpp.dir/build
-.PHONY : std_msgs_generate_messages_cpp/fast
-
-# Convenience name for target.
 my_robot/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/rule:
 	cd /home/tran/github/robot_ws/build && $(MAKE) -f CMakeFiles/Makefile2 my_robot/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/rule
 .PHONY : my_robot/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/rule
@@ -299,6 +269,36 @@ std_msgs_generate_messages_lisp: my_robot/CMakeFiles/std_msgs_generate_messages_
 std_msgs_generate_messages_lisp/fast:
 	cd /home/tran/github/robot_ws/build && $(MAKE) -f my_robot/CMakeFiles/std_msgs_generate_messages_lisp.dir/build.make my_robot/CMakeFiles/std_msgs_generate_messages_lisp.dir/build
 .PHONY : std_msgs_generate_messages_lisp/fast
+
+# Convenience name for target.
+my_robot/CMakeFiles/my_robot_genlisp.dir/rule:
+	cd /home/tran/github/robot_ws/build && $(MAKE) -f CMakeFiles/Makefile2 my_robot/CMakeFiles/my_robot_genlisp.dir/rule
+.PHONY : my_robot/CMakeFiles/my_robot_genlisp.dir/rule
+
+# Convenience name for target.
+my_robot_genlisp: my_robot/CMakeFiles/my_robot_genlisp.dir/rule
+
+.PHONY : my_robot_genlisp
+
+# fast build rule for target.
+my_robot_genlisp/fast:
+	cd /home/tran/github/robot_ws/build && $(MAKE) -f my_robot/CMakeFiles/my_robot_genlisp.dir/build.make my_robot/CMakeFiles/my_robot_genlisp.dir/build
+.PHONY : my_robot_genlisp/fast
+
+# Convenience name for target.
+my_robot/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule:
+	cd /home/tran/github/robot_ws/build && $(MAKE) -f CMakeFiles/Makefile2 my_robot/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
+.PHONY : my_robot/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
+
+# Convenience name for target.
+std_msgs_generate_messages_cpp: my_robot/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
+
+.PHONY : std_msgs_generate_messages_cpp
+
+# fast build rule for target.
+std_msgs_generate_messages_cpp/fast:
+	cd /home/tran/github/robot_ws/build && $(MAKE) -f my_robot/CMakeFiles/std_msgs_generate_messages_cpp.dir/build.make my_robot/CMakeFiles/std_msgs_generate_messages_cpp.dir/build
+.PHONY : std_msgs_generate_messages_cpp/fast
 
 # Convenience name for target.
 my_robot/CMakeFiles/geometry_msgs_generate_messages_nodejs.dir/rule:
@@ -503,19 +503,18 @@ help:
 	@echo "... depend"
 	@echo "... install"
 	@echo "... rebuild_cache"
-	@echo "... edit_cache"
 	@echo "... test"
-	@echo "... install/strip"
+	@echo "... edit_cache"
 	@echo "... list_install_components"
 	@echo "... my_robot_generate_messages"
 	@echo "... _my_robot_generate_messages_check_deps_ackermann"
 	@echo "... my_robot_genpy"
 	@echo "... geometry_msgs_generate_messages_eus"
 	@echo "... std_msgs_generate_messages_py"
-	@echo "... my_robot_genlisp"
-	@echo "... std_msgs_generate_messages_cpp"
 	@echo "... geometry_msgs_generate_messages_lisp"
 	@echo "... std_msgs_generate_messages_lisp"
+	@echo "... my_robot_genlisp"
+	@echo "... std_msgs_generate_messages_cpp"
 	@echo "... geometry_msgs_generate_messages_nodejs"
 	@echo "... my_robot_geneus"
 	@echo "... my_robot_generate_messages_cpp"
@@ -530,6 +529,7 @@ help:
 	@echo "... install/local"
 	@echo "... my_robot_gencpp"
 	@echo "... my_robot_generate_messages_py"
+	@echo "... install/strip"
 .PHONY : help
 
 

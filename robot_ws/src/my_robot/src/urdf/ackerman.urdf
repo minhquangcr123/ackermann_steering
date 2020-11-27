@@ -219,8 +219,7 @@ limitations under the License.
                      2 - hex_hub_depth))}
                      0"/>
         <geometry>
-          <cylinder radius="${tire_dia / 2}" length
-          ="${tire_width}"/>
+          <cylinder radius="${tire_dia / 2}" length="${tire_width}"/>
         </geometry>
       </collision>
 

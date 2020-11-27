@@ -17,6 +17,8 @@ class Ackermann(object):
 
     def __init__(self):
         #Init node 
+        self.distance_move_x = 0
+        self.total_time = 0
         rospy.init_node("ackermann_controller", anonymous = True   )
         list_ctr = rospy.ServiceProxy("/controller_manager/list_controllers", ListControllers)
         list_ctr.wait_for_service()
@@ -47,9 +49,9 @@ class Ackermann(object):
                 pub.publish(equi)
         except:
             rospy.logwarn("Failed in some where in block try, test again please !")
-        #parameter to control 
+        
+	#parameter to control 
         self._last_cmd_time = rospy.get_time()
-
         self._ackermann_cmd_lock = threading.Lock()
         self._steer_ang = 0.0# Steering angle 
         self._steer_ang_vel = 0.0# Steering angle velocity
@@ -62,6 +64,7 @@ class Ackermann(object):
 
         self._last_speed = 0.0
         self._last_accel_limit = 0.0  # Last acceleration limit
+
         # Axle angular velocities
         self._left_front_ang_vel = 0.0
         self._right_front_ang_vel = 0.0
@@ -77,7 +80,6 @@ class Ackermann(object):
         front_center = (cor_left_steer + cor_right_steer) / 2
         rear_center = (lrw_coor + rrw_coor) / 2
         self.wheel_base = np.linalg.norm(front_center - rear_center)
-
         self.inv_wheel_base =  1 / self.wheel_base
         self.square_wheel_base = self.wheel_base ** 2
 
@@ -90,29 +92,37 @@ class Ackermann(object):
         self.left_rear_axle_pub = self.creat_cmd_pub(respone, self.left_rear_axle_ctrlr_name)
         self.right_rear_axle_pub = self.creat_cmd_pub(respone, self.right_rear_axle_ctrlr_name)
 
+	self._cmd_vel = rospy.Subscriber("/cmd_vel_mux/input/teleop", Twist, self.callback)
+
     def callback(self, data):
         self._steer_ang = data.angular.z 
         self._speed = data.linear.x 
-        print(self._steer_ang, self._speed)
-
+        #print(self._steer_ang, self._speed, 'Bat dau di chuyen !')
+        #calculator total time       
+        #print(self.distance_move_x)
+        
     def spin(self) :
-        #rospy.Subscriber("/cmd_vel", Twist, self.callback)
-        rospy.Subscriber("/cmd_vel_mux/input/teleop", Twist, self.callback)
+       
         last_time = rospy.get_time()
+
         while not rospy.is_shutdown():
+           
+
             t = rospy.get_time()
             delta_t = t - last_time
             last_time = t
+
             if (self._cmd_timeout > 0.0 and t - self._last_cmd_time > self._cmd_timeout):
                 steer_angel_chaned, center_y = self.control_steer(self._last_steer_ang, 0.0, 0.001)
                 self.control_axle(0.0, 0.0, 0.0, steer_ang_changed, center_y,self._steer_ang  )
                 
-            elif delta_t >0.0:
+            elif delta_t > 0.0:
                 with self._ackermann_cmd_lock:
                     steer_ang = self._steer_ang  #0
                     steer_ang_vel = self._steer_ang_vel #0
                     speed = self._speed #0
                     accel = self._accel #0
+
                 steer_ang_changed, center_y = self.control_steer(steer_ang, steer_ang_vel, delta_t)
                 self.control_axle(speed, accel, delta_t, steer_ang_changed,
                                  center_y, steer_ang)
@@ -129,8 +139,9 @@ class Ackermann(object):
 
             #print(self._left_front_ang_vel,self._right_front_ang_vel,self._left_rear_ang_vel,self._right_rear_ang_vel)
             self.tranform()
-
             self.frequency.sleep()
+    
+
     def tranform(self):
         odom_pub = rospy.Publisher("/my_odom", Odometry, queue_size = 10)
         odom_broadcaster = tf.TransformBroadcaster()
@@ -155,6 +166,9 @@ class Ackermann(object):
         #odom_quat = tf.transformations.quaternion_from_euler(0, 0, odom.pose.pose.orientation.z)
         odom_broadcaster.sendTransform((odom.pose.pose.position.x, odom.pose.pose.position.y, 0), 
                                             (0, 0, quat[2], quat[3]), rospy.Time.now(), "base_link","odom")
+
+        odom_broadcaster.sendTransform((0, 0, 0), 
+                                            (0, 0, 0, 1), rospy.Time.now(), "odom", "map")
         odom_pub.publish(odom)
         
     def control_axle(self, speed, accel_limit, delta_t, steer_angle_changed, center_y, angle):
@@ -211,10 +225,12 @@ class Ackermann(object):
             theta = steer_ang #limit control angle theta
         center_y = self.wheel_base * math.tan(math.pi/2 - theta)
         steer_anl_changed = theta != self._last_steer_ang
+
         if steer_anl_changed :
             self._last_steer_ang = theta
             self._theta_left =  self._get_steer_ang(math.atan(self.inv_wheel_base * (center_y - self.dis_stee_div2)))
             self._theta_right = self._get_steer_ang(math.atan(self.inv_wheel_base * (center_y + self.dis_stee_div2)))
+
         return  steer_anl_changed, center_y
 
     def creat_cmd_pub(self, list_ctrlr, ctrlr_name):

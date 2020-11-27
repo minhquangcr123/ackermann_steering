@@ -12,7 +12,7 @@ import tf
 from nav_msgs.msg import Odometry
 from std_msgs.msg import Header
 from gazebo_msgs.srv import GetModelState, GetModelStateRequest
-from Tkinter import *
+
 from nav_msgs.msg import Path
 from geometry_msgs.msg import PoseStamped
 from sensor_msgs.msg import LaserScan
@@ -27,15 +27,15 @@ class Ackermann(object):
         #Set defaut parameters
         self.D_dia = 1.0
         self.time_out = 1.0
-        self.frequency = rospy.Rate(10.0)
-        self._cmd_timeout = 60* 10
+        self.frequency = rospy.Rate(50.0)
+        self._cmd_timeout = 60 * 10
         self.point = []
         self.odom_car = []
 
         #initialize for visualize a path moved
         self.path_moved = Path()
         self.path_moved.header.frame_id = "path_moved"
-        self.path_moved.header.stamp = rospy.Time.now()
+        self.path_moved.header.stamp = rospy.Time(0)
 
         #broadcaster transform
         self.broadcaster = tf.TransformBroadcaster()
@@ -103,34 +103,29 @@ class Ackermann(object):
         self.left_rear_axle_pub = self.creat_cmd_pub(respone, self.left_rear_axle_ctrlr_name)
         self.right_rear_axle_pub = self.creat_cmd_pub(respone, self.right_rear_axle_ctrlr_name)
         
+	
+        rospy.Subscriber("/cmd_vel", Twist, self.callback)
+        
     def callback(self, data):
-        self._steer_ang = data.angular.z 
+	if abs(data.angular.z) < 1.1: 	
+        	self._steer_ang = data.angular.z 
         self._speed = data.linear.x 
         #print(self._steer_ang, self._speed)
 
-    def callback_scan(self, data_scan):
-        pub_scan = rospy.Publisher("front_scan", LaserScan, queue_size=10)
-        pub_scan = rospy.Publisher("rear_scan", LaserScan, queue_size=10)
-        pub_scan.publish(data_scan)
-        
+
 
     def spin(self) :
-        
-
         last_time = rospy.get_time()
         begin_time = last_time
 
         while not rospy.is_shutdown():
-            
-            rospy.Subscriber("/cmd_vel", Twist, self.callback)
-            rospy.Subscriber("/scan", LaserScan, self.callback_scan)
             #print(self.wheel_base)
             t = rospy.get_time()
             delta_t = t - last_time
             last_time = t
             if (self._cmd_timeout > 0.0 and t - self._last_cmd_time > self._cmd_timeout):
                 steer_angel_chaned, center_y = self.control_steer(self._last_steer_ang, 0.0, 0.001)
-                self.control_axle(0.0, 0.0, 0.0, steer_ang_changed, center_y,self._steer_ang  )
+                self.control_axle(0.0, 0.0, 0.0, steer_ang_changed, center_y,self._steer_ang )
                 
             elif delta_t >0.0:
                 with self._ackermann_cmd_lock:
@@ -159,11 +154,11 @@ class Ackermann(object):
             self.frequency.sleep()
     
     def visualize_path(self):
-        pub_path_moved = rospy.Publisher("path_moved", Path, queue_size= 10)
+	pub_path_moved = rospy.Publisher("/path_moved", Path, queue_size= 10)
         rospy.wait_for_service("/gazebo/get_model_state")
         get_model_respone = rospy.ServiceProxy("gazebo/get_model_state", GetModelState)            
         header = Header()
-        header.frame_id = "/odom"
+        header.frame_id = "/odom_moved"
         header.stamp = rospy.Time.now()
         model = GetModelStateRequest()
         model.model_name = "ackerman"
@@ -186,13 +181,15 @@ class Ackermann(object):
         pose_moved.pose.orientation.z = quat[3]
 
         self.path_moved.poses.append(pose_moved)
-        self.broadcaster.sendTransform((0.0, 0.0, 0.0),(0.0,0.0,0.0,1.0),
-                            rospy.Time.now(),"path_moved", "map")
+
+	self.broadcaster.sendTransform((0.0, 0.0, 0.0),(0.0,0.0,0.0,1.0),
+                            rospy.Time.now(),"path_moved", "odom")
+
         pub_path_moved.publish(self.path_moved)
         
 
     def tranform(self):
-        odom_pub = rospy.Publisher("/my_odom", Odometry, queue_size = 10)
+        odom_pub = rospy.Publisher("/odom", Odometry, queue_size = 10)
         odom_broadcaster = tf.TransformBroadcaster()
 
         rospy.wait_for_service("/gazebo/get_model_state")
@@ -217,11 +214,10 @@ class Ackermann(object):
         print(angle)
         quat = tf.transformations.quaternion_from_euler(angle[0], angle[1], angle[2])"""
         quat = quat / np.linalg.norm(quat)
-        odom_broadcaster.sendTransform((odom.pose.pose.position.x, odom.pose.pose.position.y, 0), 
-                                            (0, 0, quat[2], quat[3]), rospy.Time.now(), "base_link", "map")
-                                           
-        odom_broadcaster.sendTransform((0, 0, 0), 
-                                            (0, 0, 0,  1), rospy.Time.now(), "odom", "map")                                   
+        self.broadcaster.sendTransform((odom.pose.pose.position.x, odom.pose.pose.position.y, 0), 
+                                            (0, 0, quat[2], quat[3]), rospy.Time.now(), "base_link", "odom")
+        self.broadcaster.sendTransform((0, 0, 0), (0, 0, 0, 1), rospy.Time.now(), "odom", "map")
+                                                   	                        
         odom_pub.publish(odom)
         self.odom_car=[odom.pose.pose.position.x, odom.pose.pose.position.y, quat[2], quat[3]]
 
@@ -289,11 +285,11 @@ class Ackermann(object):
     def creat_cmd_pub(self, list_ctrlr, ctrlr_name):
         #creat cmd publisher
         self.wait_controller(list_ctrlr, ctrlr_name)
-        return rospy.Publisher(ctrlr_name +"/command", Float64, queue_size = 1)
+        return rospy.Publisher(ctrlr_name +"/command", Float64, queue_size = 10)
         
     def get_coordinate(self, link):
         listener = tf.TransformListener()
-        rate = rospy.Rate(10.0)
+        rate = rospy.Rate(5.0)
         while not rospy.is_shutdown():
             try:
                 (trans,rot) = listener.lookupTransform(self.right_rear_link_name, link, rospy.Time(0))

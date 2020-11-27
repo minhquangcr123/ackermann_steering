@@ -18,9 +18,6 @@ obstacle_detector/CMakeFiles/obstacle_detector_gui.dir/obstacle_detector_gui_aut
  /home/tran/github/robot_ws/src/obstacle_detector/include/obstacle_detector/panels/obstacle_publisher_panel.h
  /home/tran/github/robot_ws/src/obstacle_detector/include/obstacle_detector/panels/obstacle_tracker_panel.h
  /home/tran/github/robot_ws/src/obstacle_detector/include/obstacle_detector/panels/scans_merger_panel.h
- /opt/ros/kinetic/include/boost_161_condition_variable.h
- /opt/ros/kinetic/include/boost_161_pthread_condition_variable.h
- /opt/ros/kinetic/include/boost_161_pthread_condition_variable_fwd.h
  /opt/ros/kinetic/include/geometry_msgs/Point.h
  /opt/ros/kinetic/include/geometry_msgs/Point32.h
  /opt/ros/kinetic/include/geometry_msgs/PointStamped.h
@@ -54,6 +51,7 @@ obstacle_detector/CMakeFiles/obstacle_detector_gui.dir/obstacle_detector_gui_aut
  /opt/ros/kinetic/include/ros/exceptions.h
  /opt/ros/kinetic/include/ros/forwards.h
  /opt/ros/kinetic/include/ros/init.h
+ /opt/ros/kinetic/include/ros/internal/condition_variable.h
  /opt/ros/kinetic/include/ros/macros.h
  /opt/ros/kinetic/include/ros/master.h
  /opt/ros/kinetic/include/ros/message.h
@@ -512,9 +510,6 @@ obstacle_detector/CMakeFiles/obstacle_detector_gui.dir/src/displays/obstacles_di
  /home/tran/github/robot_ws/src/obstacle_detector/include/obstacle_detector/displays/obstacles_display.h
  /home/tran/github/robot_ws/src/obstacle_detector/include/obstacle_detector/displays/segment_visual.h
  /home/tran/github/robot_ws/src/obstacle_detector/src/displays/obstacles_display.cpp
- /opt/ros/kinetic/include/boost_161_condition_variable.h
- /opt/ros/kinetic/include/boost_161_pthread_condition_variable.h
- /opt/ros/kinetic/include/boost_161_pthread_condition_variable_fwd.h
  /opt/ros/kinetic/include/class_loader/./class_loader.hpp
  /opt/ros/kinetic/include/class_loader/class_loader.h
  /opt/ros/kinetic/include/class_loader/class_loader_core.hpp
@@ -557,6 +552,7 @@ obstacle_detector/CMakeFiles/obstacle_detector_gui.dir/src/displays/obstacles_di
  /opt/ros/kinetic/include/ros/exceptions.h
  /opt/ros/kinetic/include/ros/forwards.h
  /opt/ros/kinetic/include/ros/init.h
+ /opt/ros/kinetic/include/ros/internal/condition_variable.h
  /opt/ros/kinetic/include/ros/macros.h
  /opt/ros/kinetic/include/ros/master.h
  /opt/ros/kinetic/include/ros/message.h

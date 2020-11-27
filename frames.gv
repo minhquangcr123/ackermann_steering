@@ -1,21 +1,21 @@
 digraph G {
-"base_link" -> "chassis"[label="Broadcaster: /robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 2315.063 sec old)\nBuffer length: 0.000 sec\n"];
-"map" -> "base_link"[label="Broadcaster: /control\nAverage rate: 30.476 Hz\nMost recent transform: 2315.041 ( 0.022 sec old)\nBuffer length: 1.575 sec\n"];
-"Laser_link" -> "Camera_link"[label="Broadcaster: /robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 2315.063 sec old)\nBuffer length: 0.000 sec\n"];
-"chassis" -> "Laser_link"[label="Broadcaster: /robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 2315.063 sec old)\nBuffer length: 0.000 sec\n"];
-"left_front_axle_carrier" -> "left_front_wheel"[label="Broadcaster: /robot_state_publisher\nAverage rate: 42.794 Hz\nMost recent transform: 2315.046 ( 0.017 sec old)\nBuffer length: 1.589 sec\n"];
-"left_steering_link" -> "left_front_axle_carrier"[label="Broadcaster: /robot_state_publisher\nAverage rate: 42.794 Hz\nMost recent transform: 2315.046 ( 0.017 sec old)\nBuffer length: 1.589 sec\n"];
-"chassis" -> "left_steering_link"[label="Broadcaster: /robot_state_publisher\nAverage rate: 42.794 Hz\nMost recent transform: 2315.046 ( 0.017 sec old)\nBuffer length: 1.589 sec\n"];
-"left_rear_axle_carrier" -> "left_rear_wheel"[label="Broadcaster: /robot_state_publisher\nAverage rate: 42.794 Hz\nMost recent transform: 2315.046 ( 0.017 sec old)\nBuffer length: 1.589 sec\n"];
-"chassis" -> "left_rear_axle_carrier"[label="Broadcaster: /robot_state_publisher\nAverage rate: 42.794 Hz\nMost recent transform: 2315.046 ( 0.017 sec old)\nBuffer length: 1.589 sec\n"];
-"right_front_axle_carrier" -> "right_front_wheel"[label="Broadcaster: /robot_state_publisher\nAverage rate: 42.794 Hz\nMost recent transform: 2315.046 ( 0.017 sec old)\nBuffer length: 1.589 sec\n"];
-"right_steering_link" -> "right_front_axle_carrier"[label="Broadcaster: /robot_state_publisher\nAverage rate: 42.794 Hz\nMost recent transform: 2315.046 ( 0.017 sec old)\nBuffer length: 1.589 sec\n"];
-"chassis" -> "right_steering_link"[label="Broadcaster: /robot_state_publisher\nAverage rate: 42.794 Hz\nMost recent transform: 2315.046 ( 0.017 sec old)\nBuffer length: 1.589 sec\n"];
-"right_rear_axle_carrier" -> "right_rear_wheel"[label="Broadcaster: /robot_state_publisher\nAverage rate: 42.794 Hz\nMost recent transform: 2315.046 ( 0.017 sec old)\nBuffer length: 1.589 sec\n"];
-"chassis" -> "right_rear_axle_carrier"[label="Broadcaster: /robot_state_publisher\nAverage rate: 42.794 Hz\nMost recent transform: 2315.046 ( 0.017 sec old)\nBuffer length: 1.589 sec\n"];
-"map" -> "odom"[label="Broadcaster: /control\nAverage rate: 30.457 Hz\nMost recent transform: 2315.043 ( 0.020 sec old)\nBuffer length: 1.576 sec\n"];
+"base_link" -> "chassis"[label="Broadcaster: /robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1503.478 sec old)\nBuffer length: 0.000 sec\n"];
+"odom" -> "base_link"[label="Broadcaster: /control\nAverage rate: 10.603 Hz\nMost recent transform: 1503.440 ( 0.038 sec old)\nBuffer length: 1.509 sec\n"];
+"chassis" -> "Laser_link"[label="Broadcaster: /robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1503.478 sec old)\nBuffer length: 0.000 sec\n"];
+"left_front_axle_carrier" -> "left_front_wheel"[label="Broadcaster: /robot_state_publisher\nAverage rate: 41.875 Hz\nMost recent transform: 1503.456 ( 0.022 sec old)\nBuffer length: 1.600 sec\n"];
+"left_steering_link" -> "left_front_axle_carrier"[label="Broadcaster: /robot_state_publisher\nAverage rate: 41.875 Hz\nMost recent transform: 1503.456 ( 0.022 sec old)\nBuffer length: 1.600 sec\n"];
+"chassis" -> "left_steering_link"[label="Broadcaster: /robot_state_publisher\nAverage rate: 41.875 Hz\nMost recent transform: 1503.456 ( 0.022 sec old)\nBuffer length: 1.600 sec\n"];
+"left_rear_axle_carrier" -> "left_rear_wheel"[label="Broadcaster: /robot_state_publisher\nAverage rate: 41.875 Hz\nMost recent transform: 1503.456 ( 0.022 sec old)\nBuffer length: 1.600 sec\n"];
+"chassis" -> "left_rear_axle_carrier"[label="Broadcaster: /robot_state_publisher\nAverage rate: 41.875 Hz\nMost recent transform: 1503.456 ( 0.022 sec old)\nBuffer length: 1.600 sec\n"];
+"right_front_axle_carrier" -> "right_front_wheel"[label="Broadcaster: /robot_state_publisher\nAverage rate: 41.875 Hz\nMost recent transform: 1503.456 ( 0.022 sec old)\nBuffer length: 1.600 sec\n"];
+"right_steering_link" -> "right_front_axle_carrier"[label="Broadcaster: /robot_state_publisher\nAverage rate: 41.875 Hz\nMost recent transform: 1503.456 ( 0.022 sec old)\nBuffer length: 1.600 sec\n"];
+"chassis" -> "right_steering_link"[label="Broadcaster: /robot_state_publisher\nAverage rate: 41.875 Hz\nMost recent transform: 1503.456 ( 0.022 sec old)\nBuffer length: 1.600 sec\n"];
+"right_rear_axle_carrier" -> "right_rear_wheel"[label="Broadcaster: /robot_state_publisher\nAverage rate: 41.875 Hz\nMost recent transform: 1503.456 ( 0.022 sec old)\nBuffer length: 1.600 sec\n"];
+"chassis" -> "right_rear_axle_carrier"[label="Broadcaster: /robot_state_publisher\nAverage rate: 41.875 Hz\nMost recent transform: 1503.456 ( 0.022 sec old)\nBuffer length: 1.600 sec\n"];
+"map" -> "odom"[label="Broadcaster: /control\nAverage rate: 10.603 Hz\nMost recent transform: 1503.440 ( 0.038 sec old)\nBuffer length: 1.509 sec\n"];
+"map" -> "path_moved"[label="Broadcaster: /control\nAverage rate: 10.631 Hz\nMost recent transform: 1503.464 ( 0.014 sec old)\nBuffer length: 1.505 sec\n"];
 edge [style=invis];
  subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
-"Recorded at time: 2315.063"[ shape=plaintext ] ;
+"Recorded at time: 1503.478"[ shape=plaintext ] ;
  }->"map";
 }

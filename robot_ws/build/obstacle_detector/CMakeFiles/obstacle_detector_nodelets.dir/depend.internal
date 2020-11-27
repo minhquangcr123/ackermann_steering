@@ -11,9 +11,6 @@ obstacle_detector/CMakeFiles/obstacle_detector_nodelets.dir/src/nodelets/obstacl
  /home/tran/github/robot_ws/src/obstacle_detector/include/obstacle_detector/utilities/point_set.h
  /home/tran/github/robot_ws/src/obstacle_detector/include/obstacle_detector/utilities/segment.h
  /home/tran/github/robot_ws/src/obstacle_detector/src/nodelets/obstacle_extractor_nodelet.cpp
- /opt/ros/kinetic/include/boost_161_condition_variable.h
- /opt/ros/kinetic/include/boost_161_pthread_condition_variable.h
- /opt/ros/kinetic/include/boost_161_pthread_condition_variable_fwd.h
  /opt/ros/kinetic/include/class_loader/./class_loader.hpp
  /opt/ros/kinetic/include/class_loader/class_loader.h
  /opt/ros/kinetic/include/class_loader/class_loader_core.hpp
@@ -53,6 +50,7 @@ obstacle_detector/CMakeFiles/obstacle_detector_nodelets.dir/src/nodelets/obstacl
  /opt/ros/kinetic/include/ros/exceptions.h
  /opt/ros/kinetic/include/ros/forwards.h
  /opt/ros/kinetic/include/ros/init.h
+ /opt/ros/kinetic/include/ros/internal/condition_variable.h
  /opt/ros/kinetic/include/ros/macros.h
  /opt/ros/kinetic/include/ros/master.h
  /opt/ros/kinetic/include/ros/message.h
@@ -228,9 +226,6 @@ obstacle_detector/CMakeFiles/obstacle_detector_nodelets.dir/src/nodelets/obstacl
  /home/tran/github/robot_ws/src/obstacle_detector/include/obstacle_detector/utilities/point.h
  /home/tran/github/robot_ws/src/obstacle_detector/include/obstacle_detector/utilities/tracked_obstacle.h
  /home/tran/github/robot_ws/src/obstacle_detector/src/nodelets/obstacle_tracker_nodelet.cpp
- /opt/ros/kinetic/include/boost_161_condition_variable.h
- /opt/ros/kinetic/include/boost_161_pthread_condition_variable.h
- /opt/ros/kinetic/include/boost_161_pthread_condition_variable_fwd.h
  /opt/ros/kinetic/include/class_loader/./class_loader.hpp
  /opt/ros/kinetic/include/class_loader/class_loader.h
  /opt/ros/kinetic/include/class_loader/class_loader_core.hpp
@@ -270,6 +265,7 @@ obstacle_detector/CMakeFiles/obstacle_detector_nodelets.dir/src/nodelets/obstacl
  /opt/ros/kinetic/include/ros/exceptions.h
  /opt/ros/kinetic/include/ros/forwards.h
  /opt/ros/kinetic/include/ros/init.h
+ /opt/ros/kinetic/include/ros/internal/condition_variable.h
  /opt/ros/kinetic/include/ros/macros.h
  /opt/ros/kinetic/include/ros/master.h
  /opt/ros/kinetic/include/ros/message.h
@@ -356,9 +352,6 @@ obstacle_detector/CMakeFiles/obstacle_detector_nodelets.dir/src/nodelets/obstacl
 obstacle_detector/CMakeFiles/obstacle_detector_nodelets.dir/src/nodelets/scans_merger_nodelet.cpp.o
  /home/tran/github/robot_ws/src/obstacle_detector/include/obstacle_detector/scans_merger.h
  /home/tran/github/robot_ws/src/obstacle_detector/src/nodelets/scans_merger_nodelet.cpp
- /opt/ros/kinetic/include/boost_161_condition_variable.h
- /opt/ros/kinetic/include/boost_161_pthread_condition_variable.h
- /opt/ros/kinetic/include/boost_161_pthread_condition_variable_fwd.h
  /opt/ros/kinetic/include/class_loader/./class_loader.hpp
  /opt/ros/kinetic/include/class_loader/class_loader.h
  /opt/ros/kinetic/include/class_loader/class_loader_core.hpp
@@ -400,6 +393,7 @@ obstacle_detector/CMakeFiles/obstacle_detector_nodelets.dir/src/nodelets/scans_m
  /opt/ros/kinetic/include/ros/exceptions.h
  /opt/ros/kinetic/include/ros/forwards.h
  /opt/ros/kinetic/include/ros/init.h
+ /opt/ros/kinetic/include/ros/internal/condition_variable.h
  /opt/ros/kinetic/include/ros/macros.h
  /opt/ros/kinetic/include/ros/master.h
  /opt/ros/kinetic/include/ros/message.h

@@ -11,9 +11,6 @@ obstacle_detector/CMakeFiles/obstacle_tracker_node.dir/src/nodes/obstacle_tracke
  /home/tran/github/robot_ws/src/obstacle_detector/include/obstacle_detector/utilities/point.h
  /home/tran/github/robot_ws/src/obstacle_detector/include/obstacle_detector/utilities/tracked_obstacle.h
  /home/tran/github/robot_ws/src/obstacle_detector/src/nodes/obstacle_tracker_node.cpp
- /opt/ros/kinetic/include/boost_161_condition_variable.h
- /opt/ros/kinetic/include/boost_161_pthread_condition_variable.h
- /opt/ros/kinetic/include/boost_161_pthread_condition_variable_fwd.h
  /opt/ros/kinetic/include/geometry_msgs/Point.h
  /opt/ros/kinetic/include/geometry_msgs/Point32.h
  /opt/ros/kinetic/include/geometry_msgs/PointStamped.h
@@ -42,6 +39,7 @@ obstacle_detector/CMakeFiles/obstacle_tracker_node.dir/src/nodes/obstacle_tracke
  /opt/ros/kinetic/include/ros/exceptions.h
  /opt/ros/kinetic/include/ros/forwards.h
  /opt/ros/kinetic/include/ros/init.h
+ /opt/ros/kinetic/include/ros/internal/condition_variable.h
  /opt/ros/kinetic/include/ros/macros.h
  /opt/ros/kinetic/include/ros/master.h
  /opt/ros/kinetic/include/ros/message.h

@@ -1,0 +1,6 @@
+<launch>
+
+ <arg name="args1" value ="all"/>
+ <node pkg="my_robot" type="point.py" name="executable" output="screen" args="$(arg args1)"/>
+
+</launch>
