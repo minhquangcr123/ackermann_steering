@@ -1,0 +1,28 @@
+<launch>
+<master auto="start"/>
+<include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find my_robot)/src/world/first_world.world"/>
+</include>
+<param name="robot_description" command="$(find xacro)/xacro.py --inorder '$(find my_robot)/src/urdf/ackerman.urdf'" />
+<node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" 
+                args="-param robot_description -urdf -model ackerman" />
+<include file="$(find my_robot)/src/launch/launch.launch"/>
+<rosparam file="$(find my_robot)/src/config/control.yaml" command="load"/>
+<rosparam file="$(find my_robot)/src/config/control_param.yaml" command="load"/>
+<node name="controller_spawner" pkg="controller_manager" type="spawner"
+args = "
+                                left_steering_ctrlr 
+                                right_steering_ctrlr 
+                                left_front_axle_ctrlr
+                                right_front_axle_ctrlr
+                                left_rear_axle_ctrlr 
+                                right_rear_axle_ctrlr 
+                                left_front_shock_ctrlr 
+                                right_front_shock_ctrlr 
+                                left_rear_shock_ctrlr 
+                                right_rear_shock_ctrlr"/>
+<!--include file="$(find my_robot)/src/launch/controller.launch"/ -->
+
+
+
+</launch>

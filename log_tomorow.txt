@@ -1,0 +1,4 @@
+- Chay lai 1 lan ca he thong test
+- Luu file plot lai thanh 1 file
+- Hoan thanh bao cao
+
