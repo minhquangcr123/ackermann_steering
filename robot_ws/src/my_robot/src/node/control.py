@@ -102,32 +102,36 @@ class Ackermann(object):
         self.right_front_axle_pub = self.creat_cmd_pub(respone, self.right_front_axle_ctrlr_name)
         self.left_rear_axle_pub = self.creat_cmd_pub(respone, self.left_rear_axle_ctrlr_name)
         self.right_rear_axle_pub = self.creat_cmd_pub(respone, self.right_rear_axle_ctrlr_name)
-        
-	
-        rospy.Subscriber("/cmd_vel", Twist, self.callback)
+
+        self.cmd_positive = rospy.Publisher("cmd_input_positive", Float64, queue_size = 10)
+        self.cmd_angular = rospy.Publisher("cmd_input_angular", Float64, queue_size = 10)  
+        self._cmd_vel_data = 0.0
+        self._cmd_angular_data = 0.0
         
     def callback(self, data):
-	if abs(data.angular.z) < 1.1: 	
-        	self._steer_ang = data.angular.z 
         self._speed = data.linear.x 
-        #print(self._steer_ang, self._speed)
+        if data.linear.x < 0: 	
+            self._steer_ang = - data.angular.z 
+        else:
+            self._steer_ang = data.angular.z
 
-
-
+        angular = ( data.linear.x / 0.335004153719 ) * math.tan(data.angular.z)
+        self._cmd_angular_data = angular
+        self._cmd_vel_data = abs(data.linear.x)
+        
     def spin(self) :
         last_time = rospy.get_time()
-        begin_time = last_time
-
         while not rospy.is_shutdown():
+            self._cmd_vel = rospy.Subscriber("/cmd_vel", Twist, self.callback)
             #print(self.wheel_base)
             t = rospy.get_time()
             delta_t = t - last_time
             last_time = t
             if (self._cmd_timeout > 0.0 and t - self._last_cmd_time > self._cmd_timeout):
-                steer_angel_chaned, center_y = self.control_steer(self._last_steer_ang, 0.0, 0.001)
+                steer_ang_changed, center_y = self.control_steer(self._last_steer_ang, 0.0, 0.001)
                 self.control_axle(0.0, 0.0, 0.0, steer_ang_changed, center_y,self._steer_ang )
                 
-            elif delta_t >0.0:
+            elif delta_t > 0.0:
                 with self._ackermann_cmd_lock:
                     steer_ang = self._steer_ang  #0
                     steer_ang_vel = self._steer_ang_vel #0
@@ -147,6 +151,9 @@ class Ackermann(object):
             self.left_rear_axle_pub.publish(self._left_rear_ang_vel)
             self.right_rear_axle_pub.publish(self._right_rear_ang_vel)
 
+            self.cmd_positive.publish(self._cmd_vel_data)
+            self.cmd_angular.publish(self._cmd_angular_data)
+
             #print(self._left_front_ang_vel,self._right_front_ang_vel,self._left_rear_ang_vel,self._right_rear_ang_vel)
             
             self.tranform()
@@ -154,7 +161,7 @@ class Ackermann(object):
             self.frequency.sleep()
     
     def visualize_path(self):
-	pub_path_moved = rospy.Publisher("/path_moved", Path, queue_size= 10)
+        pub_path_moved = rospy.Publisher("/path_moved", Path, queue_size= 10)
         rospy.wait_for_service("/gazebo/get_model_state")
         get_model_respone = rospy.ServiceProxy("gazebo/get_model_state", GetModelState)            
         header = Header()
@@ -181,12 +188,8 @@ class Ackermann(object):
         pose_moved.pose.orientation.z = quat[3]
 
         self.path_moved.poses.append(pose_moved)
-
-	self.broadcaster.sendTransform((0.0, 0.0, 0.0),(0.0,0.0,0.0,1.0),
-                            rospy.Time.now(),"path_moved", "odom")
-
+        self.broadcaster.sendTransform((0.0, 0.0, 0.0),(0.0,0.0,0.0,1.0), rospy.Time.now(),"path_moved", "odom")
         pub_path_moved.publish(self.path_moved)
-        
 
     def tranform(self):
         odom_pub = rospy.Publisher("/odom", Odometry, queue_size = 10)
@@ -233,38 +236,37 @@ class Ackermann(object):
             veh_speed = speed
         if veh_speed != self._last_speed or steer_angle_changed:
             #print(center_y)
-            if angle < -0.00001 or angle > 0.00001:
-                self._last_speed = veh_speed
-                left_dist = center_y - self.dis_stee_div2
-                right_dist = center_y + self.dis_stee_div2
+            #if angle < -0.00001 or angle > 0.00001:
+            self._last_speed = veh_speed
+            left_dist = center_y - self.dis_stee_div2
+            right_dist = center_y + self.dis_stee_div2
                 #print(left_dist, right_dist)
 
                     #Front
-                gain = (2 * math.pi) * veh_speed / abs(center_y)
-                #gain =  veh_speed / abs(center_y)
-                r_in = np.linalg.norm(left_dist ** 2 + self.square_wheel_base)
-                self._left_front_ang_vel = gain * r_in * self.left_front_iv_cir # v_angle = v_linear * omega = v_linear * 2 pi / T
+            gain = (2 * math.pi) * veh_speed / abs(center_y)
+            r_in = math.sqrt(left_dist ** 2 + self.square_wheel_base)
+            self._left_front_ang_vel = gain * r_in * self.left_front_iv_cir # v_angle = v_linear * omega = v_linear * 2 pi / T
                 
-                r_out = np.linalg.norm(right_dist ** 2 + self.square_wheel_base)
-                self._right_front_ang_vel = gain * r_out * self.right_front_iv_cir
+            r_out = math.sqrt(right_dist ** 2 + self.square_wheel_base)
+            self._right_front_ang_vel = gain * r_out * self.right_front_iv_cir
                 
                
                     #Rear
-                gain = (2 * math.pi) * veh_speed / abs(center_y)
+            gain = (2 * math.pi) * veh_speed / abs(center_y)
  
-                self._left_rear_ang_vel = gain * abs(left_dist * self.left_front_iv_cir)
-                self._right_rear_ang_vel = gain * abs(right_dist * self.left_front_iv_cir)
+            self._left_rear_ang_vel = gain * abs(left_dist * self.left_front_iv_cir)
+            self._right_rear_ang_vel = gain * abs(right_dist * self.left_front_iv_cir)
                
-            else :
-                self._last_speed = veh_speed
-                left_dist = center_y - self.dis_stee_div2
-                right_dist = center_y + self.dis_stee_div2
+            # else :
+            #     self._last_speed = veh_speed
+            #     left_dist = center_y - self.dis_stee_div2
+            #     right_dist = center_y + self.dis_stee_div2
 
-                gain = (2 * math.pi) * veh_speed / abs(center_y) 
-                self._left_rear_ang_vel = gain * left_dist * self.left_front_iv_cir
-                self._right_rear_ang_vel = gain * right_dist * self.left_front_iv_cir
-                self._left_front_ang_vel = gain * left_dist * self.left_front_iv_cir
-                self._right_front_ang_vel = gain * right_dist * self.left_front_iv_cir
+            #     gain = (2 * math.pi) * veh_speed / abs(center_y) 
+            #     self._left_rear_ang_vel = gain * left_dist * self.left_front_iv_cir
+            #     self._right_rear_ang_vel = gain * right_dist * self.left_front_iv_cir
+            #     self._left_front_ang_vel = gain * left_dist * self.left_front_iv_cir
+            #     self._right_front_ang_vel = gain * right_dist * self.left_front_iv_cir
     
     def control_steer(self, steer_ang, steer_ang_vel_limit, delta_t):
         #control steering

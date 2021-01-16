@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
-  "obstacle_detector_gui_automoc.cpp"
-  "CMakeFiles/obstacle_extractor.dir/src/obstacle_extractor.cpp.o"
   "/home/tran/github/robot_ws/devel/lib/libobstacle_extractor.pdb"
   "/home/tran/github/robot_ws/devel/lib/libobstacle_extractor.so"
+  "CMakeFiles/obstacle_extractor.dir/src/obstacle_extractor.cpp.o"
 )
 
 # Per-language clean rules from dependency scanning.

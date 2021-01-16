@@ -12,112 +12,97 @@
 ;;//! \htmlinclude ackermann.msg.html
 (if (not (find-package "GEOMETRY_MSGS"))
   (ros::roseus-add-msgs "geometry_msgs"))
+(if (not (find-package "STD_MSGS"))
+  (ros::roseus-add-msgs "std_msgs"))
 
 
 (defclass my_robot::ackermann
   :super ros::object
-  :slots (_points ))
+  :slots (_twist _direction ))
 
 (defmethod my_robot::ackermann
   (:init
    (&key
-    ((:points __points) (let (r) (dotimes (i 0) (push (instance geometry_msgs::PoseStamped :init) r)) r))
+    ((:twist __twist) (instance geometry_msgs::Twist :init))
+    ((:direction __direction) (instance std_msgs::Float64 :init))
     )
    (send-super :init)
-   (setq _points __points)
+   (setq _twist __twist)
+   (setq _direction __direction)
    self)
-  (:points
-   (&rest __points)
-   (if (keywordp (car __points))
-       (send* _points __points)
+  (:twist
+   (&rest __twist)
+   (if (keywordp (car __twist))
+       (send* _twist __twist)
      (progn
-       (if __points (setq _points (car __points)))
-       _points)))
+       (if __twist (setq _twist (car __twist)))
+       _twist)))
+  (:direction
+   (&rest __direction)
+   (if (keywordp (car __direction))
+       (send* _direction __direction)
+     (progn
+       (if __direction (setq _direction (car __direction)))
+       _direction)))
   (:serialization-length
    ()
    (+
-    ;; geometry_msgs/PoseStamped[] _points
-    (apply #'+ (send-all _points :serialization-length)) 4
+    ;; geometry_msgs/Twist _twist
+    (send _twist :serialization-length)
+    ;; std_msgs/Float64 _direction
+    (send _direction :serialization-length)
     ))
   (:serialize
    (&optional strm)
    (let ((s (if strm strm
               (make-string-output-stream (send self :serialization-length)))))
-     ;; geometry_msgs/PoseStamped[] _points
-     (write-long (length _points) s)
-     (dolist (elem _points)
-       (send elem :serialize s)
-       )
+     ;; geometry_msgs/Twist _twist
+       (send _twist :serialize s)
+     ;; std_msgs/Float64 _direction
+       (send _direction :serialize s)
      ;;
      (if (null strm) (get-output-stream-string s))))
   (:deserialize
    (buf &optional (ptr- 0))
-   ;; geometry_msgs/PoseStamped[] _points
-   (let (n)
-     (setq n (sys::peek buf ptr- :integer)) (incf ptr- 4)
-     (setq _points (let (r) (dotimes (i n) (push (instance geometry_msgs::PoseStamped :init) r)) r))
-     (dolist (elem- _points)
-     (send elem- :deserialize buf ptr-) (incf ptr- (send elem- :serialization-length))
-     ))
+   ;; geometry_msgs/Twist _twist
+     (send _twist :deserialize buf ptr-) (incf ptr- (send _twist :serialization-length))
+   ;; std_msgs/Float64 _direction
+     (send _direction :deserialize buf ptr-) (incf ptr- (send _direction :serialization-length))
    ;;
    self)
   )
 
-(setf (get my_robot::ackermann :md5sum-) "0ac6d244346982eba936c77e43e67b98")
+(setf (get my_robot::ackermann :md5sum-) "0bbc953f7e50c6c3cf3e95445bab2fd3")
 (setf (get my_robot::ackermann :datatype-) "my_robot/ackermann")
 (setf (get my_robot::ackermann :definition-)
-      "geometry_msgs/PoseStamped[] points
+      "geometry_msgs/Twist twist
+std_msgs/Float64 direction
 
 ================================================================================
-MSG: geometry_msgs/PoseStamped
-# A Pose with reference coordinate frame and timestamp
-Header header
-Pose pose
+MSG: geometry_msgs/Twist
+# This expresses velocity in free space broken into its linear and angular parts.
+Vector3  linear
+Vector3  angular
 
 ================================================================================
-MSG: std_msgs/Header
-# Standard metadata for higher-level stamped data types.
-# This is generally used to communicate timestamped data 
-# in a particular coordinate frame.
-# 
-# sequence ID: consecutively increasing ID 
-uint32 seq
-#Two-integer timestamp that is expressed as:
-# * stamp.sec: seconds (stamp_secs) since epoch (in Python the variable is called 'secs')
-# * stamp.nsec: nanoseconds since stamp_secs (in Python the variable is called 'nsecs')
-# time-handling sugar is provided by the client library
-time stamp
-#Frame this data is associated with
-# 0: no frame
-# 1: global frame
-string frame_id
-
-================================================================================
-MSG: geometry_msgs/Pose
-# A representation of pose in free space, composed of position and orientation. 
-Point position
-Quaternion orientation
-
-================================================================================
-MSG: geometry_msgs/Point
-# This contains the position of a point in free space
-float64 x
-float64 y
-float64 z
-
-================================================================================
-MSG: geometry_msgs/Quaternion
-# This represents an orientation in free space in quaternion form.
+MSG: geometry_msgs/Vector3
+# This represents a vector in free space. 
+# It is only meant to represent a direction. Therefore, it does not
+# make sense to apply a translation to it (e.g., when applying a 
+# generic rigid transformation to a Vector3, tf2 will only apply the
+# rotation). If you want your data to be translatable too, use the
+# geometry_msgs/Point message instead.
 
 float64 x
 float64 y
 float64 z
-float64 w
-
+================================================================================
+MSG: std_msgs/Float64
+float64 data
 ")
 
 
 
-(provide :my_robot/ackermann "0ac6d244346982eba936c77e43e67b98")
+(provide :my_robot/ackermann "0bbc953f7e50c6c3cf3e95445bab2fd3")
 
 

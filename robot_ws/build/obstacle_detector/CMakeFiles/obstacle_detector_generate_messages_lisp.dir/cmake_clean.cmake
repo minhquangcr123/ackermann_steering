@@ -1,9 +1,8 @@
 file(REMOVE_RECURSE
-  "obstacle_detector_gui_automoc.cpp"
-  "CMakeFiles/obstacle_detector_generate_messages_lisp"
   "/home/tran/github/robot_ws/devel/share/common-lisp/ros/obstacle_detector/msg/CircleObstacle.lisp"
   "/home/tran/github/robot_ws/devel/share/common-lisp/ros/obstacle_detector/msg/Obstacles.lisp"
   "/home/tran/github/robot_ws/devel/share/common-lisp/ros/obstacle_detector/msg/SegmentObstacle.lisp"
+  "CMakeFiles/obstacle_detector_generate_messages_lisp"
 )
 
 # Per-language clean rules from dependency scanning.

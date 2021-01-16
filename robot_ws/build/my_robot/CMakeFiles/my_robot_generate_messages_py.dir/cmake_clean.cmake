@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/my_robot_generate_messages_py"
-  "/home/tran/github/robot_ws/devel/lib/python2.7/dist-packages/my_robot/msg/_ackermann.py"
   "/home/tran/github/robot_ws/devel/lib/python2.7/dist-packages/my_robot/msg/__init__.py"
+  "/home/tran/github/robot_ws/devel/lib/python2.7/dist-packages/my_robot/msg/_ackermann.py"
+  "CMakeFiles/my_robot_generate_messages_py"
 )
 
 # Per-language clean rules from dependency scanning.

@@ -1,0 +1,7 @@
+<launch>
+<include file="$(find turtlebot_teleop)/launch/keyboard_teleop.launch"/>
+<node name ="control_manual" pkg="my_robot" type="manual_control.py" output = "screen"/>
+<node pkg="plotjuggler" type="PlotJuggler" name="my_plot_Juggler" args="" />
+<!--node pkg="rqt_reconfigure" type="rqt_reconfigure" name="my_rqt_reconfigure"/-->
+<node name ="convert" pkg="my_robot" type="test.py"/>
+</launch>

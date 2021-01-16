@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/tran/github/robot_ws/build/obstacle_detector/obstacle_detector_gui_automoc.cpp" "/home/tran/github/robot_ws/build/obstacle_detector/CMakeFiles/obstacle_detector_gui.dir/obstacle_detector_gui_automoc.cpp.o"
+  "/home/tran/github/robot_ws/build/obstacle_detector/obstacle_detector_gui_autogen/mocs_compilation.cpp" "/home/tran/github/robot_ws/build/obstacle_detector/CMakeFiles/obstacle_detector_gui.dir/obstacle_detector_gui_autogen/mocs_compilation.cpp.o"
   "/home/tran/github/robot_ws/src/obstacle_detector/src/displays/circle_visual.cpp" "/home/tran/github/robot_ws/build/obstacle_detector/CMakeFiles/obstacle_detector_gui.dir/src/displays/circle_visual.cpp.o"
   "/home/tran/github/robot_ws/src/obstacle_detector/src/displays/obstacles_display.cpp" "/home/tran/github/robot_ws/build/obstacle_detector/CMakeFiles/obstacle_detector_gui.dir/src/displays/obstacles_display.cpp.o"
   "/home/tran/github/robot_ws/src/obstacle_detector/src/displays/segment_visual.cpp" "/home/tran/github/robot_ws/build/obstacle_detector/CMakeFiles/obstacle_detector_gui.dir/src/displays/segment_visual.cpp.o"
@@ -25,10 +25,12 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
   "ROSCONSOLE_BACKEND_LOG4CXX"
   "ROS_BUILD_SHARED_LIBS=1"
   "ROS_PACKAGE_NAME=\"obstacle_detector\""
+  "obstacle_detector_gui_EXPORTS"
   )
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
+  "obstacle_detector/obstacle_detector_gui_autogen/include"
   "/home/tran/github/robot_ws/devel/include"
   "/home/tran/github/robot_ws/src/obstacle_detector/include"
   "/opt/ros/kinetic/include"

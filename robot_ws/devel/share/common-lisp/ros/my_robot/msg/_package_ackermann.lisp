@@ -1,4 +1,6 @@
 (cl:in-package my_robot-msg)
-(cl:export '(POINTS-VAL
-          POINTS
+(cl:export '(TWIST-VAL
+          TWIST
+          DIRECTION-VAL
+          DIRECTION
 ))

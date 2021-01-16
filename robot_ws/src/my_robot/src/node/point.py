@@ -67,8 +67,9 @@ class Cal_point():
       
     elif self.mode == "parking":
       self.calculate_point_parking(self.point_seq_obs)
-      print(self.point_move)
-      rospy.set_param("move_seq_object", self.point_move)  
+      print("Parking mode ! Point for move : ", self.point_move)
+      rospy.set_param("move_seq_object", "{}".format(self.point_move))
+      rospy.set_param("object_position", self.point_seq_obs)
     
     elif self.mode == "slalom2":
       self.mode_slalom2()
@@ -76,14 +77,13 @@ class Cal_point():
       rospy.set_param("move_seq_object", "{}".format(self.point_move))
       rospy.set_param("object_position", self.point_seq_obs)
     else:
-      print("No Action given !")
+      print("Done !")
 
   def all_mode(self):
     self.point_move = [[8.179545, -0.970493, -1.563102/ math.pi * 180]]
     
   def callback_mode_all(self, data_laser):
     self.signal_laser_plot.append(data_laser.ranges)
-    print(data_laser)
 
 
   def callback(self,data_obj, data_laser ):
@@ -237,7 +237,8 @@ class Cal_point():
 
 if __name__ == "__main__":
   #p_obs = [[0.9,7.7],[-2.47, 7.85]] #Gui toa do vat can
-
+  
+  print(sys.argv)
   def_point = Cal_point(sys.argv[1]) 
 
   #result = publish_goal_action()

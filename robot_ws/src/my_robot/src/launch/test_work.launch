@@ -22,7 +22,7 @@ args = "
                                 left_rear_shock_ctrlr 
                                 right_rear_shock_ctrlr"/>
 <!--include file="$(find my_robot)/src/launch/controller.launch"/ -->
-
+<param name="/use_sim_time" value="true"/>
 
 
 </launch>

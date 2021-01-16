@@ -1,10 +1,9 @@
 file(REMOVE_RECURSE
-  "obstacle_detector_gui_automoc.cpp"
-  "CMakeFiles/obstacle_detector_generate_messages_eus"
+  "/home/tran/github/robot_ws/devel/share/roseus/ros/obstacle_detector/manifest.l"
   "/home/tran/github/robot_ws/devel/share/roseus/ros/obstacle_detector/msg/CircleObstacle.l"
   "/home/tran/github/robot_ws/devel/share/roseus/ros/obstacle_detector/msg/Obstacles.l"
   "/home/tran/github/robot_ws/devel/share/roseus/ros/obstacle_detector/msg/SegmentObstacle.l"
-  "/home/tran/github/robot_ws/devel/share/roseus/ros/obstacle_detector/manifest.l"
+  "CMakeFiles/obstacle_detector_generate_messages_eus"
 )
 
 # Per-language clean rules from dependency scanning.

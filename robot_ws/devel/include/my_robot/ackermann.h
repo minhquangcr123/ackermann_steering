@@ -15,7 +15,8 @@
 #include <ros/builtin_message_traits.h>
 #include <ros/message_operations.h>
 
-#include <geometry_msgs/PoseStamped.h>
+#include <geometry_msgs/Twist.h>
+#include <std_msgs/Float64.h>
 
 namespace my_robot
 {
@@ -25,17 +26,22 @@ struct ackermann_
   typedef ackermann_<ContainerAllocator> Type;
 
   ackermann_()
-    : points()  {
+    : twist()
+    , direction()  {
     }
   ackermann_(const ContainerAllocator& _alloc)
-    : points(_alloc)  {
+    : twist(_alloc)
+    , direction(_alloc)  {
   (void)_alloc;
     }
 
 
 
-   typedef std::vector< ::geometry_msgs::PoseStamped_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::geometry_msgs::PoseStamped_<ContainerAllocator> >::other >  _points_type;
-  _points_type points;
+   typedef  ::geometry_msgs::Twist_<ContainerAllocator>  _twist_type;
+  _twist_type twist;
+
+   typedef  ::std_msgs::Float64_<ContainerAllocator>  _direction_type;
+  _direction_type direction;
 
 
 
@@ -71,7 +77,7 @@ namespace message_traits
 
 
 
-// BOOLTRAITS {'IsFixedSize': False, 'IsMessage': True, 'HasHeader': False}
+// BOOLTRAITS {'IsFixedSize': True, 'IsMessage': True, 'HasHeader': False}
 // {'geometry_msgs': ['/opt/ros/kinetic/share/geometry_msgs/cmake/../msg'], 'std_msgs': ['/opt/ros/kinetic/share/std_msgs/cmake/../msg'], 'my_robot': ['/home/tran/github/robot_ws/src/my_robot/msg']}
 
 // !!!!!!!!!!! ['__class__', '__delattr__', '__dict__', '__doc__', '__eq__', '__format__', '__getattribute__', '__hash__', '__init__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_parsed_fields', 'constants', 'fields', 'full_name', 'has_header', 'header_present', 'names', 'package', 'parsed_fields', 'short_name', 'text', 'types']
@@ -81,12 +87,12 @@ namespace message_traits
 
 template <class ContainerAllocator>
 struct IsFixedSize< ::my_robot::ackermann_<ContainerAllocator> >
-  : FalseType
+  : TrueType
   { };
 
 template <class ContainerAllocator>
 struct IsFixedSize< ::my_robot::ackermann_<ContainerAllocator> const>
-  : FalseType
+  : TrueType
   { };
 
 template <class ContainerAllocator>
@@ -115,12 +121,12 @@ struct MD5Sum< ::my_robot::ackermann_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "0ac6d244346982eba936c77e43e67b98";
+    return "0bbc953f7e50c6c3cf3e95445bab2fd3";
   }
 
   static const char* value(const ::my_robot::ackermann_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0x0ac6d244346982ebULL;
-  static const uint64_t static_value2 = 0xa936c77e43e67b98ULL;
+  static const uint64_t static_value1 = 0x0bbc953f7e50c6c3ULL;
+  static const uint64_t static_value2 = 0xcf3e95445bab2fd3ULL;
 };
 
 template<class ContainerAllocator>
@@ -139,53 +145,30 @@ struct Definition< ::my_robot::ackermann_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "geometry_msgs/PoseStamped[] points\n\
+    return "geometry_msgs/Twist twist\n\
+std_msgs/Float64 direction\n\
 \n\
 ================================================================================\n\
-MSG: geometry_msgs/PoseStamped\n\
-# A Pose with reference coordinate frame and timestamp\n\
-Header header\n\
-Pose pose\n\
+MSG: geometry_msgs/Twist\n\
+# This expresses velocity in free space broken into its linear and angular parts.\n\
+Vector3  linear\n\
+Vector3  angular\n\
 \n\
 ================================================================================\n\
-MSG: std_msgs/Header\n\
-# Standard metadata for higher-level stamped data types.\n\
-# This is generally used to communicate timestamped data \n\
-# in a particular coordinate frame.\n\
-# \n\
-# sequence ID: consecutively increasing ID \n\
-uint32 seq\n\
-#Two-integer timestamp that is expressed as:\n\
-# * stamp.sec: seconds (stamp_secs) since epoch (in Python the variable is called 'secs')\n\
-# * stamp.nsec: nanoseconds since stamp_secs (in Python the variable is called 'nsecs')\n\
-# time-handling sugar is provided by the client library\n\
-time stamp\n\
-#Frame this data is associated with\n\
-# 0: no frame\n\
-# 1: global frame\n\
-string frame_id\n\
-\n\
-================================================================================\n\
-MSG: geometry_msgs/Pose\n\
-# A representation of pose in free space, composed of position and orientation. \n\
-Point position\n\
-Quaternion orientation\n\
-\n\
-================================================================================\n\
-MSG: geometry_msgs/Point\n\
-# This contains the position of a point in free space\n\
-float64 x\n\
-float64 y\n\
-float64 z\n\
-\n\
-================================================================================\n\
-MSG: geometry_msgs/Quaternion\n\
-# This represents an orientation in free space in quaternion form.\n\
+MSG: geometry_msgs/Vector3\n\
+# This represents a vector in free space. \n\
+# It is only meant to represent a direction. Therefore, it does not\n\
+# make sense to apply a translation to it (e.g., when applying a \n\
+# generic rigid transformation to a Vector3, tf2 will only apply the\n\
+# rotation). If you want your data to be translatable too, use the\n\
+# geometry_msgs/Point message instead.\n\
 \n\
 float64 x\n\
 float64 y\n\
 float64 z\n\
-float64 w\n\
+================================================================================\n\
+MSG: std_msgs/Float64\n\
+float64 data\n\
 ";
   }
 
@@ -204,7 +187,8 @@ namespace serialization
   {
     template<typename Stream, typename T> inline static void allInOne(Stream& stream, T m)
     {
-      stream.next(m.points);
+      stream.next(m.twist);
+      stream.next(m.direction);
     }
 
     ROS_DECLARE_ALLINONE_SERIALIZER
@@ -223,14 +207,12 @@ struct Printer< ::my_robot::ackermann_<ContainerAllocator> >
 {
   template<typename Stream> static void stream(Stream& s, const std::string& indent, const ::my_robot::ackermann_<ContainerAllocator>& v)
   {
-    s << indent << "points[]" << std::endl;
-    for (size_t i = 0; i < v.points.size(); ++i)
-    {
-      s << indent << "  points[" << i << "]: ";
-      s << std::endl;
-      s << indent;
-      Printer< ::geometry_msgs::PoseStamped_<ContainerAllocator> >::stream(s, indent + "    ", v.points[i]);
-    }
+    s << indent << "twist: ";
+    s << std::endl;
+    Printer< ::geometry_msgs::Twist_<ContainerAllocator> >::stream(s, indent + "  ", v.twist);
+    s << indent << "direction: ";
+    s << std::endl;
+    Printer< ::std_msgs::Float64_<ContainerAllocator> >::stream(s, indent + "  ", v.direction);
   }
 };
 

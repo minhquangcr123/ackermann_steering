@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/my_robot_generate_messages_nodejs"
   "/home/tran/github/robot_ws/devel/share/gennodejs/ros/my_robot/msg/ackermann.js"
+  "CMakeFiles/my_robot_generate_messages_nodejs"
 )
 
 # Per-language clean rules from dependency scanning.

@@ -10,59 +10,35 @@ import geometry_msgs.msg
 import std_msgs.msg
 
 class ackermann(genpy.Message):
-  _md5sum = "0ac6d244346982eba936c77e43e67b98"
+  _md5sum = "0bbc953f7e50c6c3cf3e95445bab2fd3"
   _type = "my_robot/ackermann"
   _has_header = False  # flag to mark the presence of a Header object
-  _full_text = """geometry_msgs/PoseStamped[] points
+  _full_text = """geometry_msgs/Twist twist
+std_msgs/Float64 direction
 
 ================================================================================
-MSG: geometry_msgs/PoseStamped
-# A Pose with reference coordinate frame and timestamp
-Header header
-Pose pose
+MSG: geometry_msgs/Twist
+# This expresses velocity in free space broken into its linear and angular parts.
+Vector3  linear
+Vector3  angular
 
 ================================================================================
-MSG: std_msgs/Header
-# Standard metadata for higher-level stamped data types.
-# This is generally used to communicate timestamped data 
-# in a particular coordinate frame.
-# 
-# sequence ID: consecutively increasing ID 
-uint32 seq
-#Two-integer timestamp that is expressed as:
-# * stamp.sec: seconds (stamp_secs) since epoch (in Python the variable is called 'secs')
-# * stamp.nsec: nanoseconds since stamp_secs (in Python the variable is called 'nsecs')
-# time-handling sugar is provided by the client library
-time stamp
-#Frame this data is associated with
-# 0: no frame
-# 1: global frame
-string frame_id
-
-================================================================================
-MSG: geometry_msgs/Pose
-# A representation of pose in free space, composed of position and orientation. 
-Point position
-Quaternion orientation
-
-================================================================================
-MSG: geometry_msgs/Point
-# This contains the position of a point in free space
-float64 x
-float64 y
-float64 z
-
-================================================================================
-MSG: geometry_msgs/Quaternion
-# This represents an orientation in free space in quaternion form.
+MSG: geometry_msgs/Vector3
+# This represents a vector in free space. 
+# It is only meant to represent a direction. Therefore, it does not
+# make sense to apply a translation to it (e.g., when applying a 
+# generic rigid transformation to a Vector3, tf2 will only apply the
+# rotation). If you want your data to be translatable too, use the
+# geometry_msgs/Point message instead.
 
 float64 x
 float64 y
 float64 z
-float64 w
-"""
-  __slots__ = ['points']
-  _slot_types = ['geometry_msgs/PoseStamped[]']
+================================================================================
+MSG: std_msgs/Float64
+float64 data"""
+  __slots__ = ['twist','direction']
+  _slot_types = ['geometry_msgs/Twist','std_msgs/Float64']
 
   def __init__(self, *args, **kwds):
     """
@@ -72,7 +48,7 @@ float64 w
     changes.  You cannot mix in-order arguments and keyword arguments.
 
     The available fields are:
-       points
+       twist,direction
 
     :param args: complete set of field values, in .msg order
     :param kwds: use keyword arguments corresponding to message field names
@@ -81,10 +57,13 @@ float64 w
     if args or kwds:
       super(ackermann, self).__init__(*args, **kwds)
       # message fields cannot be None, assign default values for those that are
-      if self.points is None:
-        self.points = []
+      if self.twist is None:
+        self.twist = geometry_msgs.msg.Twist()
+      if self.direction is None:
+        self.direction = std_msgs.msg.Float64()
     else:
-      self.points = []
+      self.twist = geometry_msgs.msg.Twist()
+      self.direction = std_msgs.msg.Float64()
 
   def _get_types(self):
     """
@@ -98,28 +77,8 @@ float64 w
     :param buff: buffer, ``StringIO``
     """
     try:
-      length = len(self.points)
-      buff.write(_struct_I.pack(length))
-      for val1 in self.points:
-        _v1 = val1.header
-        _x = _v1.seq
-        buff.write(_get_struct_I().pack(_x))
-        _v2 = _v1.stamp
-        _x = _v2
-        buff.write(_get_struct_2I().pack(_x.secs, _x.nsecs))
-        _x = _v1.frame_id
-        length = len(_x)
-        if python3 or type(_x) == unicode:
-          _x = _x.encode('utf-8')
-          length = len(_x)
-        buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-        _v3 = val1.pose
-        _v4 = _v3.position
-        _x = _v4
-        buff.write(_get_struct_3d().pack(_x.x, _x.y, _x.z))
-        _v5 = _v3.orientation
-        _x = _v5
-        buff.write(_get_struct_4d().pack(_x.x, _x.y, _x.z, _x.w))
+      _x = self
+      buff.write(_get_struct_7d().pack(_x.twist.linear.x, _x.twist.linear.y, _x.twist.linear.z, _x.twist.angular.x, _x.twist.angular.y, _x.twist.angular.z, _x.direction.data))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -130,45 +89,15 @@ float64 w
     """
     codecs.lookup_error("rosmsg").msg_type = self._type
     try:
-      if self.points is None:
-        self.points = None
+      if self.twist is None:
+        self.twist = geometry_msgs.msg.Twist()
+      if self.direction is None:
+        self.direction = std_msgs.msg.Float64()
       end = 0
+      _x = self
       start = end
-      end += 4
-      (length,) = _struct_I.unpack(str[start:end])
-      self.points = []
-      for i in range(0, length):
-        val1 = geometry_msgs.msg.PoseStamped()
-        _v6 = val1.header
-        start = end
-        end += 4
-        (_v6.seq,) = _get_struct_I().unpack(str[start:end])
-        _v7 = _v6.stamp
-        _x = _v7
-        start = end
-        end += 8
-        (_x.secs, _x.nsecs,) = _get_struct_2I().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        if python3:
-          _v6.frame_id = str[start:end].decode('utf-8', 'rosmsg')
-        else:
-          _v6.frame_id = str[start:end]
-        _v8 = val1.pose
-        _v9 = _v8.position
-        _x = _v9
-        start = end
-        end += 24
-        (_x.x, _x.y, _x.z,) = _get_struct_3d().unpack(str[start:end])
-        _v10 = _v8.orientation
-        _x = _v10
-        start = end
-        end += 32
-        (_x.x, _x.y, _x.z, _x.w,) = _get_struct_4d().unpack(str[start:end])
-        self.points.append(val1)
+      end += 56
+      (_x.twist.linear.x, _x.twist.linear.y, _x.twist.linear.z, _x.twist.angular.x, _x.twist.angular.y, _x.twist.angular.z, _x.direction.data,) = _get_struct_7d().unpack(str[start:end])
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e)  # most likely buffer underfill
@@ -181,28 +110,8 @@ float64 w
     :param numpy: numpy python module
     """
     try:
-      length = len(self.points)
-      buff.write(_struct_I.pack(length))
-      for val1 in self.points:
-        _v11 = val1.header
-        _x = _v11.seq
-        buff.write(_get_struct_I().pack(_x))
-        _v12 = _v11.stamp
-        _x = _v12
-        buff.write(_get_struct_2I().pack(_x.secs, _x.nsecs))
-        _x = _v11.frame_id
-        length = len(_x)
-        if python3 or type(_x) == unicode:
-          _x = _x.encode('utf-8')
-          length = len(_x)
-        buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-        _v13 = val1.pose
-        _v14 = _v13.position
-        _x = _v14
-        buff.write(_get_struct_3d().pack(_x.x, _x.y, _x.z))
-        _v15 = _v13.orientation
-        _x = _v15
-        buff.write(_get_struct_4d().pack(_x.x, _x.y, _x.z, _x.w))
+      _x = self
+      buff.write(_get_struct_7d().pack(_x.twist.linear.x, _x.twist.linear.y, _x.twist.linear.z, _x.twist.angular.x, _x.twist.angular.y, _x.twist.angular.z, _x.direction.data))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -214,45 +123,15 @@ float64 w
     """
     codecs.lookup_error("rosmsg").msg_type = self._type
     try:
-      if self.points is None:
-        self.points = None
+      if self.twist is None:
+        self.twist = geometry_msgs.msg.Twist()
+      if self.direction is None:
+        self.direction = std_msgs.msg.Float64()
       end = 0
+      _x = self
       start = end
-      end += 4
-      (length,) = _struct_I.unpack(str[start:end])
-      self.points = []
-      for i in range(0, length):
-        val1 = geometry_msgs.msg.PoseStamped()
-        _v16 = val1.header
-        start = end
-        end += 4
-        (_v16.seq,) = _get_struct_I().unpack(str[start:end])
-        _v17 = _v16.stamp
-        _x = _v17
-        start = end
-        end += 8
-        (_x.secs, _x.nsecs,) = _get_struct_2I().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        if python3:
-          _v16.frame_id = str[start:end].decode('utf-8', 'rosmsg')
-        else:
-          _v16.frame_id = str[start:end]
-        _v18 = val1.pose
-        _v19 = _v18.position
-        _x = _v19
-        start = end
-        end += 24
-        (_x.x, _x.y, _x.z,) = _get_struct_3d().unpack(str[start:end])
-        _v20 = _v18.orientation
-        _x = _v20
-        start = end
-        end += 32
-        (_x.x, _x.y, _x.z, _x.w,) = _get_struct_4d().unpack(str[start:end])
-        self.points.append(val1)
+      end += 56
+      (_x.twist.linear.x, _x.twist.linear.y, _x.twist.linear.z, _x.twist.angular.x, _x.twist.angular.y, _x.twist.angular.z, _x.direction.data,) = _get_struct_7d().unpack(str[start:end])
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e)  # most likely buffer underfill
@@ -261,21 +140,9 @@ _struct_I = genpy.struct_I
 def _get_struct_I():
     global _struct_I
     return _struct_I
-_struct_2I = None
-def _get_struct_2I():
-    global _struct_2I
-    if _struct_2I is None:
-        _struct_2I = struct.Struct("<2I")
-    return _struct_2I
-_struct_3d = None
-def _get_struct_3d():
-    global _struct_3d
-    if _struct_3d is None:
-        _struct_3d = struct.Struct("<3d")
-    return _struct_3d
-_struct_4d = None
-def _get_struct_4d():
-    global _struct_4d
-    if _struct_4d is None:
-        _struct_4d = struct.Struct("<4d")
-    return _struct_4d
+_struct_7d = None
+def _get_struct_7d():
+    global _struct_7d
+    if _struct_7d is None:
+        _struct_7d = struct.Struct("<7d")
+    return _struct_7d

@@ -50,7 +50,7 @@ limitations under the License.
   <xacro:property name="tire_dia" value="0.14605"/>
   <xacro:property name="tire_width" value="0.0889"/>
   <xacro:property name="hex_hub_depth" value="0.01445"/>
-  <xacro:property name="wheel_mass" value="0.29"/>
+  <xacro:property name="wheel_mass" value="0.29"/> 		<!--0.29-->
 
   <!-- hex_hub_dist is the distance between left and right hex hubs when
        the shock absorbers are fully extended. axle_length is the distance
@@ -251,6 +251,7 @@ limitations under the License.
       <limit lower="${-degrees_45}" upper="${degrees_45}"
              effort="${servo_stall_torque}" velocity="${servo_no_load_speed}"/>
     </joint>
+    
     <transmission name="${lr_prefix}_steering_trans">
       <type>transmission_interface/SimpleTransmission</type>
       <joint name="${lr_prefix}_steering_joint">
@@ -360,7 +361,7 @@ limitations under the License.
     <material>Gazebo/Red</material>
     <sensor type="ray" name="head_hokuyo_sensor">
       <pose>0 0 0 0 0 0</pose>
-      <visualize>false</visualize>
+      <visualize>true</visualize>
       <update_rate>40</update_rate>
       <ray>
         <scan>

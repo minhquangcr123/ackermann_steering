@@ -1,4 +1,4 @@
-#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
 
 #IncludeRegexScan: ^.*$
 
@@ -218,7 +218,11 @@ obstacle_detector/scans_merger.h
 pluginlib/class_list_macros.h
 -
 
-/opt/ros/kinetic/include/class_loader/./class_loader.hpp
+/opt/ros/kinetic/include/class_loader/class_loader.h
+./class_loader.hpp
+/opt/ros/kinetic/include/class_loader/class_loader.hpp
+
+/opt/ros/kinetic/include/class_loader/class_loader.hpp
 boost/bind.hpp
 -
 boost/shared_ptr.hpp
@@ -230,21 +234,17 @@ string
 vector
 -
 console_bridge/console.h
-/opt/ros/kinetic/include/class_loader/./console_bridge/console.h
+/opt/ros/kinetic/include/class_loader/console_bridge/console.h
 class_loader/class_loader_core.hpp
-/opt/ros/kinetic/include/class_loader/./class_loader/class_loader_core.hpp
+/opt/ros/kinetic/include/class_loader/class_loader/class_loader_core.hpp
 class_loader/console_bridge_compatibility.hpp
-/opt/ros/kinetic/include/class_loader/./class_loader/console_bridge_compatibility.hpp
+/opt/ros/kinetic/include/class_loader/class_loader/console_bridge_compatibility.hpp
 class_loader/register_macro.hpp
-/opt/ros/kinetic/include/class_loader/./class_loader/register_macro.hpp
+/opt/ros/kinetic/include/class_loader/class_loader/register_macro.hpp
 memory
 -
 functional
 -
-
-/opt/ros/kinetic/include/class_loader/class_loader.h
-./class_loader.hpp
-/opt/ros/kinetic/include/class_loader/./class_loader.hpp
 
 /opt/ros/kinetic/include/class_loader/class_loader_core.hpp
 boost/thread/recursive_mutex.hpp
@@ -606,13 +606,13 @@ ros/console.h
 boost/shared_ptr.hpp
 -
 
-/opt/ros/kinetic/include/pluginlib/./class_list_macros.hpp
-class_loader/class_loader.h
--
-
 /opt/ros/kinetic/include/pluginlib/class_list_macros.h
 ./class_list_macros.hpp
-/opt/ros/kinetic/include/pluginlib/./class_list_macros.hpp
+/opt/ros/kinetic/include/pluginlib/class_list_macros.hpp
+
+/opt/ros/kinetic/include/pluginlib/class_list_macros.hpp
+class_loader/class_loader.h
+-
 
 /opt/ros/kinetic/include/ros/advertise_options.h
 ros/forwards.h

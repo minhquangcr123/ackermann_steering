@@ -1,1 +1,2 @@
-geometry_msgs/PoseStamped[] points
+geometry_msgs/Twist twist
+std_msgs/Float64 direction
